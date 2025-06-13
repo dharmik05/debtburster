@@ -1,0 +1,42 @@
+{
+  "userProfile": {
+    "objective": "Become Debt Free",
+    "monthlyIncome": 3500.00,
+    "allocatedIncomePercentage": 20,
+    "allocatedIncomeAmount": 1050.00,
+    "nextOverallPaymentDate": "2025-06-20"
+  },
+  "debts": [
+    {
+      "id": "car_loan_1",
+      "lenderName": "DriveAway Credit",
+      "type": "Car Loan",
+      "originalDebt": 5000.00,
+      "remainingDebt": 2000.00,
+      "amountPaid": 3000.00,
+      "percentageCompleted": 60,
+      "interestRate": 4.5,
+      "minimumPayment": 150.00,
+      "nextPaymentDate": "2025-07-01"
+    },
+    {
+      "id": "credit_card_1",
+      "lenderName": "Horizon Bank",
+      "type": "Credit Card",
+      "originalDebt": 3000.00,
+      "remainingDebt": 0.00,
+      "amountPaid": 3000.00,
+      "percentageCompleted": 100,
+      "interestRate": 19.9,
+      "minimumPayment": 0.00,
+      "nextPaymentDate": null
+    }
+    
+  ],
+  "dashboardOverview": {
+    "totalDebtLeft": 2000.00,    
+    "totalDebtPaid": 6000.00,    
+    "totalOriginalDebt": 8000.00, 
+    "overallProgressPercentage": 75 
+  }
+}
