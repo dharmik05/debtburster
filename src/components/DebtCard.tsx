@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
+import PaymentModal from './PaymentModal';
+import DebtDetails from '@/components/DebtDetails'; // MODIFIED: Import DebtDetails component
 
 // Define the structure of a single debt item
 interface Debt {
@@ -12,17 +14,29 @@ interface Debt {
   interestRate: number;
   minimumPayment: number;
   nextPaymentDate: string | null;
+  paymentHistory: Array<{
+    date: string; // ISO string format "YYYY-MM-DD"
+    amount: number;
+  }>;
+  expectedPaymentDates: string[];
+  loanTermMonths?: number;
+  creditLimit?: number;
 }
 
 // Define the props that DebtCard expects to receive
 interface DebtCardProps {
-  debt: Debt; // The debt object with all its details
-  onUpdateDebt: (updatedDebt: Debt) => void; // A function to tell the parent about changes
+  debt: Debt;
+  onUpdateDebt: (updatedDebt: Debt) => void;
+  // MODIFIED: onShowDetails prop removed, as modal is now handled internally
 }
 
-const DebtCard: React.FC<DebtCardProps> = ({ debt, onUpdateDebt }) => {
+const DebtCard: React.FC<DebtCardProps> = ({ debt, onUpdateDebt }) => { // MODIFIED: onShowDetails removed from destructuring
   // State to control if the card is in editing mode
   const [isEditing, setIsEditing] = useState(false);
+
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  // MODIFIED: Local state to control the DebtDetails modal
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
 
   // States to hold the current values as the user types (strings for contentEditable)
   const [currentDebtType, setCurrentDebtType] = useState(debt.type);
@@ -37,10 +51,8 @@ const DebtCard: React.FC<DebtCardProps> = ({ debt, onUpdateDebt }) => {
   const interestRateRef = useRef<HTMLSpanElement>(null);
 
   // Calculate values that depend on the original debt amount
-  const calculatedRemainingDebt = parseFloat(currentOriginalDebt) - debt.amountPaid;
-  const calculatedPercentageCompleted = parseFloat(currentOriginalDebt) > 0
-    ? (debt.amountPaid / parseFloat(currentOriginalDebt)) * 100
-    : 0;
+  const calculatedRemainingDebt = debt.remainingDebt;
+  const calculatedPercentageCompleted = debt.percentageCompleted;
 
   // Function to ensure numbers are correctly formatted
   const validateAndFormatNumber = (value: string): string => {
@@ -142,6 +154,47 @@ const DebtCard: React.FC<DebtCardProps> = ({ debt, onUpdateDebt }) => {
     }
   };
 
+  const handleMakePaymentClick = () => {
+    setShowPaymentModal(true);
+  };
+
+  const handleConfirmPayment = (paymentAmount: number, paymentDate: string) => {
+    const newAmountPaid = debt.amountPaid + paymentAmount;
+    const newRemainingDebt = debt.originalDebt - newAmountPaid;
+    const newPercentageCompleted = debt.originalDebt > 0
+      ? (newAmountPaid / debt.originalDebt) * 100
+      : 0;
+
+    const updatedPaymentHistory = [
+      ...debt.paymentHistory,
+      { date: paymentDate, amount: paymentAmount }
+    ];
+
+    const updatedExpectedPaymentDates = debt.expectedPaymentDates; // Keep as is for now
+
+    const updatedDebt: Debt = {
+      ...debt,
+      amountPaid: parseFloat(newAmountPaid.toFixed(2)),
+      remainingDebt: parseFloat(newRemainingDebt.toFixed(2)),
+      percentageCompleted: parseFloat(newPercentageCompleted.toFixed(2)),
+      paymentHistory: updatedPaymentHistory, // Assign the updated history
+      expectedPaymentDates: updatedExpectedPaymentDates, // Assign potentially updated expected dates
+    };
+
+    onUpdateDebt(updatedDebt);
+    setShowPaymentModal(false);
+  };
+
+  // MODIFIED: Functions to handle showing and hiding DebtDetails modal locally
+  const handleShowDetailsClick = () => {
+    setShowDetailsModal(true);
+  };
+
+  const handleCloseDetails = () => {
+    setShowDetailsModal(false);
+  };
+
+
   return (
     <>
       <div className="car-section">
@@ -190,7 +243,7 @@ const DebtCard: React.FC<DebtCardProps> = ({ debt, onUpdateDebt }) => {
 
         {/* Original Amount */}
         <div className="label-value">
-          <span className="car-finances-label">Original</span>
+          <span className="car-finances-label">Total Loan Cost</span>
           {isEditing ? (
             <span
               className="car-finances-value value editable-field"
@@ -245,10 +298,38 @@ const DebtCard: React.FC<DebtCardProps> = ({ debt, onUpdateDebt }) => {
         </div>
 
         <div className="car-actions">
-          <span className="car-action-link">Details</span>
-          <span className="car-action-link">Make Payment</span>
+          <span className="car-action-link" onClick={handleShowDetailsClick}>
+            Details
+          </span>
+          <span className="car-action-link" onClick={handleMakePaymentClick}>
+            Make Payment
+          </span>
         </div>
+
+
       </div>
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        onConfirmPayment={handleConfirmPayment}
+        debtType={debt.type}
+        lenderName={debt.lenderName}
+        remainingDebt={debt.remainingDebt}
+      />
+
+      {showDetailsModal && (
+        <div className="debt-details-overlay">
+          <div className="debt-details-modal-content">
+            <button
+              onClick={handleCloseDetails}
+              className="debt-details-modal-close-button"
+            >
+              &times;
+            </button>
+            <DebtDetails debt={debt} /> {/* Pass the current debt to DebtDetails */}
+          </div>
+        </div>
+      )}
     </>
   );
 };

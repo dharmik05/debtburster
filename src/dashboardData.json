@@ -1,43 +1,102 @@
 {
   "userProfile": {
-    "objective": "Become Debt Free",
-    "monthlyIncome": 3500.00,
-    "allocatedIncomePercentage": 20,
-    "allocatedIncomeAmount": 1050.00,
-    "nextOverallPaymentDate": "2025-06-20"
+    "monthlyIncome": 3000,
+    "allocatedIncomePercentage": 23,
+    "allocatedIncomeAmount": 690
   },
   "debts": [
     {
-      "id": "car_loan_1",
-      "lenderName": "DriveAway Credit",
+      "id": "debt-123",
+      "lenderName": "VehicleMotions.Inc",
       "type": "Car Loan",
-      "originalDebt": 5000.00,
-      "remainingDebt": 2000.00,
-      "amountPaid": 3000.00,
-      "percentageCompleted": 60,
+      "originalDebt": 22390.96,
+      "remainingDebt": 12000,
+      "amountPaid": 8000,
+      "percentageCompleted": 40,
       "interestRate": 4.5,
-      "minimumPayment": 150.00,
-      "nextPaymentDate": "2025-07-01"
+      "minimumPayment": 350,
+      "paymentHistory": [
+        { "date": "2024-01-15", "amount": 350 },
+        { "date": "2024-02-15", "amount": 350 },
+        { "date": "2024-03-15", "amount": 500 },
+        { "date": "2024-04-15", "amount": 350 },
+        { "date": "2024-05-15", "amount": 1000 },
+        { "date": "2024-06-15", "amount": 350 },
+        { "date": "2024-07-15", "amount": 350 },
+        { "date": "2024-08-15", "amount": 350 },
+        { "date": "2024-09-15", "amount": 350 },
+        { "date": "2024-10-15", "amount": 350 },
+        { "date": "2024-11-15", "amount": 350 },
+        { "date": "2024-12-15", "amount": 350 },
+        { "date": "2025-01-15", "amount": 350 },
+        { "date": "2025-02-15", "amount": 350 },
+        { "date": "2025-03-15", "amount": 350 },
+        { "date": "2025-04-15", "amount": 350 },
+        { "date": "2025-05-15", "amount": 350 }
+      ],
+      "expectedPaymentDates": [
+        "2025-06-15",
+        "2025-07-15",
+        "2025-08-15",
+        "2025-09-15",
+        "2025-10-15",
+        "2025-11-15",
+        "2025-12-15",
+        "2026-01-15",
+        "2026-02-15",
+        "2026-03-15"
+      ],
+      "loanTermMonths": 60 
     },
     {
-      "id": "credit_card_1",
-      "lenderName": "Horizon Bank",
+      "id": "debt-456",
+      "lenderName": "EduLoan Inc.",
+      "type": "Student Loan",
+      "originalDebt": 19982.40, 
+      "remainingDebt": 14500,
+      "amountPaid": 500,
+      "percentageCompleted": 3.33,
+      "interestRate": 6.2,
+      "minimumPayment": 100,
+      "paymentHistory": [
+        { "date": "2025-01-01", "amount": 100 },
+        { "date": "2025-02-01", "amount": 100 },
+        { "date": "2025-03-01", "amount": 100 },
+        { "date": "2025-04-01", "amount": 100 },
+        { "date": "2025-05-01", "amount": 100 }
+      ],
+      "expectedPaymentDates": [
+        "2025-06-01",
+        "2025-07-01",
+        "2025-08-01",
+        "2025-09-01",
+        "2025-10-01"
+      ],
+      "loanTermMonths": 120 
+    },
+    {
+      "id": "debt-789",
+      "lenderName": "CreditUnion One",
       "type": "Credit Card",
-      "originalDebt": 3000.00,
-      "remainingDebt": 0.00,
-      "amountPaid": 3000.00,
-      "percentageCompleted": 100,
-      "interestRate": 19.9,
-      "minimumPayment": 0.00,
-      "nextPaymentDate": null
+      "originalDebt": 3000, 
+      "remainingDebt": 2500,
+      "amountPaid": 500,
+      "percentageCompleted": 16.67,
+      "interestRate": 18.99,
+      "minimumPayment": 50,
+      "paymentHistory": [
+        { "date": "2025-04-20", "amount": 100 },
+        { "date": "2025-05-20", "amount": 400 }
+      ],
+      "expectedPaymentDates": [], 
+      "creditLimit": 5000 
     }
-    
   ],
   "dashboardOverview": {
-    "totalDebtLeft": 2000.00,    
-    "totalDebtPaid": 6000.00,    
-    "totalOriginalDebt": 8000.00, 
-    "overallProgressPercentage": 75,
-    "nextOverallPaymentDate": ""
+    "totalDebtLeft": 29000,
+    "totalDebtPaid": 8500,
+    "totalOriginalDebt": 45373.36,
+    "overallProgressPercentage": 24.29,
+    "nextOverallPaymentDate": "2025-06-01"
   }
 }

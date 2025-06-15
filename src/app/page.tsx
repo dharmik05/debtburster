@@ -10,8 +10,6 @@ import DebtCard from "../components/DebtCard";
 import Header from "../components/Header";
 import Summary from "../components/Summary";
 
-// --- Define Interfaces (Recommended for type safety) ---
-// You might put these in a separate 'types.ts' file if your project grows
 interface Debt {
   id: string;
   lenderName: string;
@@ -22,7 +20,19 @@ interface Debt {
   percentageCompleted: number;
   interestRate: number;
   minimumPayment: number;
-  nextPaymentDate: string | null;
+  paymentHistory: Array<{
+    date: string;
+    amount: number;
+  }>;
+  expectedPaymentDates: string[];
+  loanTermMonths?: number;
+  creditLimit?: number;
+}
+
+interface UserProfile {
+  monthlyIncome: number;
+  allocatedIncomePercentage: number;
+  allocatedIncomeAmount: number;
 }
 
 interface DashboardOverview {
@@ -30,15 +40,7 @@ interface DashboardOverview {
   totalDebtPaid: number;
   totalOriginalDebt: number;
   overallProgressPercentage: number;
-  nextOverallPaymentDate: string;
-}
-
-interface UserProfile {
-  objective: string;
-  monthlyIncome: number;
-  allocatedIncomePercentage: number;
-  allocatedIncomeAmount: number;
-  nextOverallPaymentDate: string;
+  nextOverallPaymentDate: string | null;
 }
 
 interface DashboardData {
@@ -47,38 +49,64 @@ interface DashboardData {
   dashboardOverview: DashboardOverview;
 }
 
+const getNextDebtPaymentDate = (dates: string[]): string | null => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Normalize to start of day
+
+  const futureDates = dates
+    .map(dateStr => new Date(dateStr))
+    .filter(date => date >= today); // Filter out past dates
+
+  if (futureDates.length === 0) {
+    return null; // No future payments
+  }
+
+  // Find the earliest future date
+  const nextDate = new Date(Math.min(...futureDates.map(date => date.getTime())));
+  return nextDate.toISOString().split('T')[0]; // Return as "YYYY-MM-DD"
+};
+
 // Helper function to recalculate the dashboard overview whenever debts change
 const calculateDashboardOverview = (debts: Debt[], monthlyIncome: number): DashboardOverview => {
   let totalDebtLeft = 0;
   let totalDebtPaid = 0;
   let totalOriginalDebt = 0;
-  let nextOverallPaymentDate: Date | null = null;
+  let allExpectedPaymentDates: Date[] = []; // Collect all future dates
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Normalize to start of day
 
   debts.forEach(debt => {
     totalDebtLeft += debt.remainingDebt;
     totalDebtPaid += debt.amountPaid;
     totalOriginalDebt += debt.originalDebt;
 
-    if (debt.nextPaymentDate) {
-      const debtPaymentDate = new Date(debt.nextPaymentDate);
-      if (!nextOverallPaymentDate || debtPaymentDate < nextOverallPaymentDate) {
-        nextOverallPaymentDate = debtPaymentDate;
+    // Collect all expected future payment dates for this debt
+    debt.expectedPaymentDates.forEach(dateStr => {
+      const date = new Date(dateStr);
+      if (date >= today) { // Only consider future dates
+        allExpectedPaymentDates.push(date);
       }
-    }
+    });
   });
 
   const overallProgressPercentage = totalOriginalDebt > 0
     ? (totalDebtPaid / totalOriginalDebt) * 100
     : 0;
 
+  // Find the earliest next payment date across all debts
+  let nextOverallPaymentDate: string | null = null;
+  if (allExpectedPaymentDates.length > 0) {
+    const earliestDate = new Date(Math.min(...allExpectedPaymentDates.map(date => date.getTime())));
+    nextOverallPaymentDate = earliestDate.toISOString().split('T')[0]; // Format as "YYYY-MM-DD"
+  }
+
   return {
     totalDebtLeft: parseFloat(totalDebtLeft.toFixed(2)),
     totalDebtPaid: parseFloat(totalDebtPaid.toFixed(2)),
     totalOriginalDebt: parseFloat(totalOriginalDebt.toFixed(2)),
     overallProgressPercentage: parseFloat(overallProgressPercentage.toFixed(2)),
-    nextOverallPaymentDate: nextOverallPaymentDate !== null
-      ? (nextOverallPaymentDate as Date).toISOString().split('T')[0]
-      : "" // Format date to string
+    nextOverallPaymentDate: nextOverallPaymentDate,
   };
 };
 

@@ -7,7 +7,7 @@ interface DashboardOverview {
   totalDebtPaid: number;
   totalOriginalDebt: number;
   overallProgressPercentage: number;
-  nextOverallPaymentDate: string; // ISO string format "YYYY-MM-DD"
+  nextOverallPaymentDate: string | null; // ISO string format "YYYY-MM-DD"
 }
 
 interface SummaryProps {

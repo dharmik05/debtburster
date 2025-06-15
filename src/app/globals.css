@@ -612,5 +612,237 @@ input[type="number"] {
     line-height: normal;
 }
 
+/* --- Payment Modal Styles (Dark Theme) --- */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* Slightly darker overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #2e2e2e; /* Dark background */
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5); /* More pronounced shadow for dark theme */
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  color: white; /* Default text color to white */
+  position: relative;
+}
+
+.modal-content h2 {
+  font-size: 1.8em;
+  margin-bottom: 15px;
+  color: white; /* Heading in white */
+}
+
+.modal-content p {
+  margin-bottom: 10px;
+  color: #939393; /* Secondary text in medium gray */
+  font-size: 0.95em;
+}
+
+.modal-remaining-debt {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #00aaff; /* A bright, contrasting blue for remaining debt */
+  margin-bottom: 20px;
+}
+
+.modal-input-group {
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+.modal-input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: white; /* Label text in white */
+}
+
+.modal-input-group input {
+  width: 100%;
+  padding: 12px;
+  background-color: #3e3e3e; /* Slightly lighter dark background for input */
+  border: 1px solid #939393; /* Border in medium gray */
+  border-radius: 5px;
+  font-size: 1.1em;
+  color: white; /* Input text in white */
+  box-sizing: border-box;
+}
+
+.modal-input-group input:focus {
+  outline: none;
+  border-color: #00aaff; /* Focus border in bright blue */
+  box-shadow: 0 0 0 2px rgba(0, 170, 255, 0.3); /* Softer shadow for dark theme */
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.modal-cancel-button {
+  background-color: #939393; /* Cancel button in medium gray */
+  color: white;
+}
+
+.modal-cancel-button:hover {
+  background-color: #7a7a7a; /* Slightly darker gray on hover */
+}
+
+.modal-confirm-button {
+  background-color: #007bff; /* Keep a primary blue for confirmation */
+  color: white;
+}
+
+.modal-confirm-button:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+/* components/DebtDetailsOverlay.css */
+
+.debt-details-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  z-index: 9999; /* Ensure it's on top of other content */
+}
+
+.debt-details-modal-content {
+  background-color: #2e2e2e;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 40rem; /* Max width for the modal content */
+  width: 100%;
+  max-height: 90vh; /* Max height, allows scrolling if content is long */
+  overflow-y: auto; /* Enables vertical scrolling */
+  position: relative; /* Needed for positioning the close button */
+}
+
+.debt-details-modal-close-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: white; /* A dark color for the 'x' button on white background */
+}
 
 
+/* components/DebtDetails.css */
+
+#debt-details-container {
+  background-color: #2e2e2e; /* Main background color */
+  color: white;             /* All text is white by default */
+  padding: 24px;
+  border-radius: 8px;
+  font-family: sans-serif; /* A common font for readability */
+}
+
+#debt-details-container h2 {
+  color: white;
+  font-size: 1.75rem;
+  margin-bottom: 16px;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns */
+  gap: 16px 24px;              /* Gap between rows and columns */
+  margin-bottom: 24px;
+}
+
+.detail-item p {
+  margin: 0; /* Remove default paragraph margins */
+}
+
+.detail-item .label {
+  color: #939393; /* Label text color */
+  font-size: 0.875rem;
+  margin-bottom: 4px;
+}
+
+.detail-item .value {
+  color: white; /* Value text color */
+  font-size: 1.125rem;
+  font-weight: bold;
+}
+
+#debt-details-container h3 {
+  color: white;
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+}
+
+.payment-history-table-wrapper {
+  max-height: 200px; /* Make table scrollable */
+  overflow-y: auto;
+  border: 1px solid #939393; /* Border for the table wrapper */
+  border-radius: 4px;
+}
+
+.payment-history-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.payment-history-table thead {
+  background-color: #3a3a3a; /* Darker background for table header */
+  position: sticky; /* Keep header visible on scroll */
+  top: 0;
+  z-index: 1; /* Ensure header stays on top */
+}
+
+.payment-history-table th {
+  padding: 12px;
+  text-align: left;
+  font-size: 0.75rem;
+  color: #939393; /* Table header text color */
+}
+
+.payment-history-table tbody tr {
+  border-bottom: 1px solid #4a4a4a; /* Separator for table rows */
+}
+
+.payment-history-table td {
+  padding: 12px;
+  white-space: nowrap; /* Prevent date/amount from wrapping */
+  font-size: 0.875rem;
+  color: white; /* Table cell text color */
+}
+
+.no-history-message {
+  color: #939393; /* Message text color */
+}
