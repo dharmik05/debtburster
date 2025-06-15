@@ -464,6 +464,8 @@ input[type="number"] {
   display: block;
 }
 
+/* DebtCard CSS */
+
 .car-section {
   background-color: #939393;
   border-radius: 15px;
@@ -473,7 +475,6 @@ input[type="number"] {
   width: 100%;
   box-sizing: border-box;
   color: #fff;
-  /* Removed font-family: sans-serif; */
 }
 
 .car-header {
@@ -505,6 +506,11 @@ input[type="number"] {
   color: #fff;
   cursor: pointer;
   font-weight: bold;
+
+
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
 }
 
 .car-finances {
@@ -512,6 +518,10 @@ input[type="number"] {
   justify-content: space-between;
   margin-bottom: 15px;
   font-size: 1.1em;
+}
+
+.car-edit:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .car-finances-label {
@@ -545,7 +555,10 @@ input[type="number"] {
   color: white;
   text-align: left;
   margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
 }
+
 
 .car-actions {
   display: flex;
@@ -559,3 +572,45 @@ input[type="number"] {
   text-decoration: none;
   cursor: pointer;
 }
+
+.car-action-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Styles for editable fields */
+.editable-field {
+  border: 1px solid white;
+  padding: 2px 5px;
+  border-radius: 4px;
+  outline: none;
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: text;
+  box-sizing: border-box;
+  min-width: 50px;
+  display: inline-block;
+  color: inherit;
+}
+
+/* Styles for clickable fields (when not editing) */
+.clickable-field {
+  cursor: pointer;
+  padding: 2px 5px;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease;
+}
+
+.clickable-field:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.car-finances-value.editable-field {
+    text-align: right;
+}
+
+.editable-field[contenteditable="true"] {
+    line-height: normal;
+}
+
+
+

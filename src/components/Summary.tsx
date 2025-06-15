@@ -2,12 +2,29 @@ import { useState, useEffect, useRef } from "react";
 import CircularBar from "./CircularBar";
 import dashboardData from "../dashboardData.json";
 
+interface DashboardOverview {
+  totalDebtLeft: number;
+  totalDebtPaid: number;
+  totalOriginalDebt: number;
+  overallProgressPercentage: number;
+  nextOverallPaymentDate: string; // ISO string format "YYYY-MM-DD"
+}
+
 interface SummaryProps {
   monthlyIncome: string;
-  setMonthlyIncome: React.Dispatch<React.SetStateAction<string>>;
+  setMonthlyIncome: (newValue: string) => void;
   allocatedIncome: string;
-  setAllocatedIncome: React.Dispatch<React.SetStateAction<string>>;
+  setAllocatedIncome: (newValue: string) => void;
+ 
+  dashboardOverview: DashboardOverview;
 }
+
+// interface SummaryProps {
+//   monthlyIncome: string;
+//   setMonthlyIncome: React.Dispatch<React.SetStateAction<string>>;
+//   allocatedIncome: string;
+//   setAllocatedIncome: React.Dispatch<React.SetStateAction<string>>;
+// }
 
 const Summary: React.FC<SummaryProps> = ({
   // These props will now be passed from a parent (e.g., App.tsx)
@@ -19,10 +36,13 @@ const Summary: React.FC<SummaryProps> = ({
   setMonthlyIncome, // Received as prop
   allocatedIncome, // Received as prop
   setAllocatedIncome, // Received as prop
+  dashboardOverview
 }) => {
-  let [editBtnValue, setEditBtnValue] = useState("Edit");
-  // const [monthlyIncome, setMonthlyIncome] = useState("3000");
-  // const [allocatedIncome, setAllocatedIncome] = useState("23");
+  const [isEditing, setIsEditing] = useState(false);
+
+  const [currentMonthlyIncome, setCurrentMonthlyIncome] = useState(monthlyIncome);
+  const [currentAllocatedIncome, setCurrentAllocatedIncome] = useState(allocatedIncome);
+
   const [contentEditable, setContentEditable] = useState(false);
 
   const monthlyIncomeSpanRef = useRef<HTMLSpanElement>(null);
@@ -37,21 +57,7 @@ const Summary: React.FC<SummaryProps> = ({
   ];
   const [tip, setTip] = useState(tips[0]);
   const [isRotating, setIsRotating] = useState(false);
-
-  useEffect(() => {
-    // Only focus if we just entered "Done" (edit) mode
-    if (editBtnValue === "Done" && monthlyIncomeSpanRef.current) {
-      monthlyIncomeSpanRef.current.focus();
-      // Place cursor at the end for better UX
-      const range = document.createRange();
-      const selection = window.getSelection();
-      range.selectNodeContents(monthlyIncomeSpanRef.current);
-      range.collapse(false); // Collapse to the end
-      selection?.removeAllRanges();
-      selection?.addRange(range);
-    }
-  }, [editBtnValue]);
-
+  
   const getRandomTip = () => {
     let newTip;
     do {
@@ -65,110 +71,107 @@ const Summary: React.FC<SummaryProps> = ({
     }, 600);
   };
 
+  
+  
   const validateAndFormatNumber = (value: string): string => {
-    const cleanedValue = value.replace(/[^\d.]/g, ""); // Remove all non-digits except '.'
-    const parts = cleanedValue.split(".");
-    let finalValue = parts[0];
+    // Remove all non-numeric characters except for the first decimal point
+    const cleaned = value.replace(/[^0-9.]/g, '');
+    const parts = cleaned.split('.');
+    let result = parts[0];
     if (parts.length > 1) {
-      finalValue += "." + parts.slice(1).join("");
+      result += '.' + parts.slice(1).join('').substring(0, 2); // Allow only two decimal places
     }
+    const parsed = parseFloat(result);
+    return isNaN(parsed) ? "0.00" : parsed.toFixed(2); // Always return a string with two decimal places
+  };
+  
+  useEffect(() => {
+    // Focus the first editable field when entering edit mode
+    if (isEditing && monthlyIncomeSpanRef.current) {
+      monthlyIncomeSpanRef.current.focus();
+      const range = document.createRange();
+      const selection = window.getSelection();
+      range.selectNodeContents(monthlyIncomeSpanRef.current);
+      range.collapse(false);
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+    }
+  }, [isEditing]);
 
-    const parsed = parseFloat(finalValue);
-    if (isNaN(parsed)) {
-      return "0"; // Return "0" for truly invalid numeric input
+  useEffect(() => {
+    if (!isEditing) { // Only update if not currently editing to avoid input override
+      setCurrentMonthlyIncome(monthlyIncome);
+      setCurrentAllocatedIncome(allocatedIncome);
     }
-    return String(parsed); // Convert back to string
+  }, [monthlyIncome, allocatedIncome, isEditing]);
+
+  const saveChanges = () => {
+    if (monthlyIncomeSpanRef.current) {
+      const validatedMonthlyIncome = validateAndFormatNumber(monthlyIncomeSpanRef.current.innerText);
+      setMonthlyIncome(validatedMonthlyIncome); // Update parent state
+    }
+    if (allocatedIncomeSpanRef.current) {
+      const validatedAllocatedIncome = validateAndFormatNumber(allocatedIncomeSpanRef.current.innerText);
+      setAllocatedIncome(validatedAllocatedIncome); // Update parent state
+    }
+    setIsEditing(false); // Exit editing mode
   };
 
-  const handelEdit = () => {
-    const newEditBtnValue = editBtnValue === "Edit" ? "Done" : "Edit";
-    setEditBtnValue(newEditBtnValue);
-
-    const enteringEditMode = newEditBtnValue === "Done";
-
-    if (!enteringEditMode) {
-      if (monthlyIncomeSpanRef.current) {
-        const validatedValue = validateAndFormatNumber(
-          monthlyIncomeSpanRef.current.innerText
-        );
-        setMonthlyIncome(validatedValue);
-        monthlyIncomeSpanRef.current.innerText = validatedValue;
-      }
-      if (allocatedIncomeSpanRef.current) {
-        const validatedValue = validateAndFormatNumber(
-          allocatedIncomeSpanRef.current.innerText
-        );
-        setAllocatedIncome(validatedValue);
-        allocatedIncomeSpanRef.current.innerText = validatedValue;
-      }
+  const handleEditClick = () => {
+    if (isEditing) { // Was in "Done" mode, now saving
+      saveChanges();
+    } else { // Was in "Edit" mode, now entering edit
+      setIsEditing(true);
     }
   };
 
   const handleEditableBlur = (event: React.FocusEvent<HTMLSpanElement>) => {
-    // Only process blur if we are still in "Done" (edit) mode
-    if (editBtnValue === "Done") {
-      const targetSpan = event.currentTarget;
-      const validatedValue = validateAndFormatNumber(targetSpan.innerText);
-      // Immediately update the DOM with the validated value for visual feedback
-      targetSpan.innerText = validatedValue;
+    // Update local state and the DOM display with validated value
+    const validatedValue = validateAndFormatNumber(event.currentTarget.innerText);
+    event.currentTarget.innerText = validatedValue; // Update DOM immediately
 
-      // Also update the corresponding state value (this is the live update)
-      if (targetSpan === monthlyIncomeSpanRef.current) {
-        setMonthlyIncome(validatedValue);
-      } else if (targetSpan === allocatedIncomeSpanRef.current) {
-        setAllocatedIncome(validatedValue);
-      }
+    if (event.currentTarget === monthlyIncomeSpanRef.current) {
+      setCurrentMonthlyIncome(validatedValue);
+    } else if (event.currentTarget === allocatedIncomeSpanRef.current) {
+      setCurrentAllocatedIncome(validatedValue);
     }
+    // Note: Actual saving to parent happens on "Done" click or Enter key
   };
 
-  // Handler for key presses (e.g., Enter to save, Escape to cancel)
-  const handleEditableKeyDown = (
-    event: React.KeyboardEvent<HTMLSpanElement>
-  ) => {
-    // Only allow digits, decimal point, and control keys like Backspace, Delete, Arrow keys, Tab
+  const handleEditableKeyDown = (event: React.KeyboardEvent<HTMLSpanElement>) => {
+    // Only allow digits, decimal point, and control keys
     const allowedKeys = [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      ".",
-      "Backspace",
-      "Delete",
-      "ArrowLeft",
-      "ArrowRight",
-      "Tab",
+      "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".",
+      "Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"
     ];
 
-    // Prevent input of disallowed characters. Allow Ctrl/Meta key combinations (e.g., Ctrl+C, Ctrl+V).
     if (!allowedKeys.includes(event.key) && !event.ctrlKey && !event.metaKey) {
-      event.preventDefault();
+      event.preventDefault(); // Prevent disallowed characters
     }
 
     if (event.key === "Enter") {
-      event.preventDefault(); // Prevent new line in contenteditable
-      event.currentTarget.blur(); // Blur the span to trigger handleEditableBlur and subsequent save logic
-      // Optionally, you could also set editBtnValue to "Edit" here to exit edit mode on Enter
-      // setEditBtnValue("Edit");
+      event.preventDefault(); // Prevent new line
+      event.currentTarget.blur(); // Trigger blur to update local state
+      saveChanges(); // Explicitly save changes to parent
     } else if (event.key === "Escape") {
-      // Revert to original values and exit edit mode
-      if (monthlyIncomeSpanRef.current) {
-        monthlyIncomeSpanRef.current.innerText = monthlyIncome; // Revert to last saved state
-      }
-      if (allocatedIncomeSpanRef.current) {
-        allocatedIncomeSpanRef.current.innerText = allocatedIncome; // Revert to last saved state
-      }
-      setEditBtnValue("Edit"); // Exit edit mode
-      event.currentTarget.blur();
+      // Revert to original prop values and exit editing mode
+      setCurrentMonthlyIncome(monthlyIncome);
+      setCurrentAllocatedIncome(allocatedIncome);
+      setIsEditing(false);
+      event.currentTarget.blur(); // Remove focus
     }
   };
 
-  const isCurrentlyEditable = editBtnValue === "Done";
+  // Format the next payment date for display
+  const nextPaymentDateFormatted = dashboardOverview.nextOverallPaymentDate
+    ? new Date(dashboardOverview.nextOverallPaymentDate).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      })
+    : 'N/A'; 
+
+  // const isCurrentlyEditable = editBtnValue === "Done";
 
   return (
     <>
@@ -178,15 +181,15 @@ const Summary: React.FC<SummaryProps> = ({
           <div id="info">
             <div className="info-top-div">
               <div className="debt-box top-box">
-                <p className="amount">$2000</p>
+                <p className="amount">${dashboardOverview.totalDebtLeft.toFixed(2)}</p>
                 <p className="label">debt left</p>
               </div>
               <div className="debt-box top-box">
-                <p className="amount">June 1</p>
+                <p className="amount">{nextPaymentDateFormatted}</p>
                 <p className="label">next date</p>
               </div>
               <div className="debt-box top-box">
-                <p className="amount">$6000</p>
+                <p className="amount">${dashboardOverview.totalDebtPaid.toFixed(2)}</p>
                 <p className="label">debt paid</p>
               </div>
             </div>
@@ -195,8 +198,8 @@ const Summary: React.FC<SummaryProps> = ({
               <div className="debt-box">
                 <div className="label-value" id="inc-header">
                   <p>Income & Allocation</p>
-                  <button className="value" onClick={handelEdit}>
-                    {editBtnValue}
+                  <button className="value" onClick={handleEditClick}>
+                    {isEditing ? "Done" : "Edit"}
                   </button>
                 </div>
 
@@ -205,16 +208,16 @@ const Summary: React.FC<SummaryProps> = ({
                   <div className="value">
                     <span>$</span>
                     <span
-                      className="editable"
-                      contentEditable={isCurrentlyEditable} // Dynamically set contentEditable
-                      ref={monthlyIncomeSpanRef} // Assign ref
-                      onBlur={handleEditableBlur} // Handle blur for validation and saving
-                      onKeyDown={handleEditableKeyDown} // Handle key presses (Enter/Escape/numeric)
-                      inputMode="decimal" // Hint for mobile keyboards
-                      pattern="[0-9]*\.?[0-9]*" // Regex hint for validation (not enforced by contentEditable itself)
-                      suppressContentEditableWarning={true} // Suppress React warning
+                      className={isEditing ? "editable-field" : "clickable-field"}
+                      contentEditable={isEditing}
+                      ref={monthlyIncomeSpanRef}
+                      onBlur={handleEditableBlur}
+                      onKeyDown={handleEditableKeyDown}
+                      inputMode="decimal"
+                      suppressContentEditableWarning={true}
+                      onClick={isEditing ? undefined : handleEditClick} // Allow click to edit if not already editing
                     >
-                      {monthlyIncome} {/* Display value from state */}
+                      {currentMonthlyIncome}
                     </span>
                   </div>
                 </div>
@@ -223,16 +226,16 @@ const Summary: React.FC<SummaryProps> = ({
                   <p>Allocated Income</p>
                   <p className="value">
                     <span
-                      className="editable"
-                      contentEditable={isCurrentlyEditable} // Dynamically set contentEditable
-                      ref={allocatedIncomeSpanRef} // Assign ref
-                      onBlur={handleEditableBlur} // Handle blur for validation and saving
-                      onKeyDown={handleEditableKeyDown} // Handle key presses (Enter/Escape/numeric)
-                      inputMode="decimal" // Hint for mobile keyboards
-                      pattern="[0-9]*\.?[0-9]*" // Regex hint for validation
-                      suppressContentEditableWarning={true} // Suppress React warning
+                      className={isEditing ? "editable-field" : "clickable-field"}
+                      contentEditable={isEditing}
+                      ref={allocatedIncomeSpanRef}
+                      onBlur={handleEditableBlur}
+                      onKeyDown={handleEditableKeyDown}
+                      inputMode="decimal"
+                      suppressContentEditableWarning={true}
+                      onClick={isEditing ? undefined : handleEditClick} // Allow click to edit if not already editing
                     >
-                      {allocatedIncome} {/* Display value from state */}
+                      {currentAllocatedIncome}
                     </span>
                     %
                   </p>

@@ -37,6 +37,7 @@
     "totalDebtLeft": 2000.00,    
     "totalDebtPaid": 6000.00,    
     "totalOriginalDebt": 8000.00, 
-    "overallProgressPercentage": 75 
+    "overallProgressPercentage": 75,
+    "nextOverallPaymentDate": ""
   }
 }
