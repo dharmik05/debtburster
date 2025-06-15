@@ -173,10 +173,12 @@ const Summary: React.FC<SummaryProps> = ({
 
   // const isCurrentlyEditable = editBtnValue === "Done";
 
+  let percentage = (Number(dashboardOverview.totalDebtPaid.toFixed(2)) / Number(dashboardOverview.totalDebtLeft.toFixed(2))) * 100;
+
   return (
     <>
       <div className="summary">
-        <CircularBar />
+        <CircularBar percentage={Math.round(percentage)} />
         <div className="summary-right-section">
           <div id="info">
             <div className="info-top-div">

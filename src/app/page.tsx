@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import styles from "./page.module.css";
 import { useState } from "react";
 import initialDashboardData from "../dashboardData.json"; // It's better to rename this to initialDashboardData
@@ -172,6 +171,14 @@ export default function Home() {
       // Recalculate the entire dashboard overview since a debt has changed
       const newOverview = calculateDashboardOverview(updatedDebts, prevData.userProfile.monthlyIncome);
 
+      const a = {
+        ...prevData,
+        debts: updatedDebts,
+        dashboardOverview: newOverview
+      }
+
+      console.log("Debt Updated:", JSON.stringify(a));
+
       return {
         ...prevData,
         debts: updatedDebts,
@@ -200,13 +207,16 @@ export default function Home() {
           <div id="right-div">
             <Achievements />
             {/* Map over the debts array to render DebtCard for each one */}
-            {dashboardData.debts.map((debtItem: Debt) => (
-              <DebtCard
-                key={debtItem.id} // Essential for React lists
-                debt={debtItem} // Pass the individual debt object
-                onUpdateDebt={handleUpdateDebt} // Pass the update handler
-              />
-            ))}
+            <div className="scrollable-debt-list">
+              {dashboardData.debts.map((debtItem: Debt) => (
+                <DebtCard
+                  key={debtItem.id} // Essential for React lists
+                  debt={debtItem} // Pass the individual debt object
+                  onUpdateDebt={handleUpdateDebt} // Pass the update handler
+                />
+              ))}
+            </div>
+            
           </div>
         </div>
       </div>
