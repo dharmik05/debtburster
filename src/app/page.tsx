@@ -1,13 +1,14 @@
 "use client";
 import styles from "./page.module.css";
 import { useState } from "react";
-import initialDashboardData from "../dashboardData.json"; // It's better to rename this to initialDashboardData
+import initialDashboardData from "../dashboardData.json";
 import ChatIcon from "../components/ChatIcon";
 import TabSlider from "../components/TabSlider";
 import Achievements from "../components/Achievements";
 import DebtCard from "../components/DebtCard";
 import Header from "../components/Header";
 import Summary from "../components/Summary";
+import AddDebtModal from "@/components/AddDebtModal";
 
 interface Debt {
   id: string;
@@ -23,9 +24,13 @@ interface Debt {
     date: string;
     amount: number;
   }>;
-  expectedPaymentDates: string[];
+  // expectedPaymentDates: string[];
   loanTermMonths?: number;
   creditLimit?: number;
+  debtBalanceHistory?: Array<{
+    date: string;
+    remainingDebt: number;
+  }>;
 }
 
 interface UserProfile {
@@ -39,7 +44,11 @@ interface DashboardOverview {
   totalDebtPaid: number;
   totalOriginalDebt: number;
   overallProgressPercentage: number;
-  nextOverallPaymentDate: string | null;
+  // nextOverallPaymentDate: string | null;
+  debtBalanceHistory: Array<{
+    date: string;
+    remainingDebt: number;
+  }>;
 }
 
 interface DashboardData {
@@ -48,32 +57,49 @@ interface DashboardData {
   dashboardOverview: DashboardOverview;
 }
 
+interface AddDebtFormData {
+    lenderName: string;
+    type: string;
+    originalDebt: string;
+    interestRate: string;
+    minimumPayment: string;
+    loanTermMonths?: string;
+    creditLimit?: string;
+}
+
 const getNextDebtPaymentDate = (dates: string[]): string | null => {
   const today = new Date();
-  today.setHours(0, 0, 0, 0); // Normalize to start of day
+  today.setHours(0, 0, 0, 0);
 
   const futureDates = dates
     .map(dateStr => new Date(dateStr))
-    .filter(date => date >= today); // Filter out past dates
+    .filter(date => date >= today);
 
   if (futureDates.length === 0) {
-    return null; // No future payments
+    return null;
   }
 
-  // Find the earliest future date
+
   const nextDate = new Date(Math.min(...futureDates.map(date => date.getTime())));
-  return nextDate.toISOString().split('T')[0]; // Return as "YYYY-MM-DD"
+  return nextDate.toISOString().split('T')[0]; 
 };
 
-// Helper function to recalculate the dashboard overview whenever debts change
-const calculateDashboardOverview = (debts: Debt[], monthlyIncome: number): DashboardOverview => {
+
+const calculateDashboardOverview = (debts: Debt[], monthlyIncome: number, updatedDebtId?: string): DashboardOverview => {
   let totalDebtLeft = 0;
   let totalDebtPaid = 0;
   let totalOriginalDebt = 0;
-  let allExpectedPaymentDates: Date[] = []; // Collect all future dates
+  let allExpectedPaymentDates: Date[] = [];
+  let debtBalanceHistory: Array<{
+    date: string;
+    remainingDebt: number;
+  }> = [];
+  let debtBalanceHistory1 = initialDashboardData.dashboardOverview.debtBalanceHistory || [];
 
   const today = new Date();
-  today.setHours(0, 0, 0, 0); // Normalize to start of day
+  today.setHours(0, 0, 0, 0);
+
+  
 
   debts.forEach(debt => {
     totalDebtLeft += debt.remainingDebt;
@@ -81,45 +107,62 @@ const calculateDashboardOverview = (debts: Debt[], monthlyIncome: number): Dashb
     totalOriginalDebt += debt.originalDebt;
 
     // Collect all expected future payment dates for this debt
-    debt.expectedPaymentDates.forEach(dateStr => {
-      const date = new Date(dateStr);
-      if (date >= today) { // Only consider future dates
-        allExpectedPaymentDates.push(date);
-      }
-    });
+    // debt.expectedPaymentDates.forEach(dateStr => {
+    //   const date = new Date(dateStr);
+    //   if (date >= today) { // Only consider future dates
+    //     allExpectedPaymentDates.push(date);
+    //   }
+    // });
   });
+
+  if(updatedDebtId) {
+    debts.forEach(debt => {
+      if (debt.id === updatedDebtId) {
+        let { date, amount: amountPaid } = debt.paymentHistory[debt.paymentHistory.length - 1];
+        debtBalanceHistory1.push({date, remainingDebt: totalDebtLeft});
+      }
+    })
+  }
+
 
   const overallProgressPercentage = totalOriginalDebt > 0
     ? (totalDebtPaid / totalOriginalDebt) * 100
     : 0;
 
   // Find the earliest next payment date across all debts
-  let nextOverallPaymentDate: string | null = null;
-  if (allExpectedPaymentDates.length > 0) {
-    const earliestDate = new Date(Math.min(...allExpectedPaymentDates.map(date => date.getTime())));
-    nextOverallPaymentDate = earliestDate.toISOString().split('T')[0]; // Format as "YYYY-MM-DD"
-  }
+  // let nextOverallPaymentDate: string | null = null;
+  // if (allExpectedPaymentDates.length > 0) {
+  //   const earliestDate = new Date(Math.min(...allExpectedPaymentDates.map(date => date.getTime())));
+  //   nextOverallPaymentDate = earliestDate.toISOString().split('T')[0]; // Format as "YYYY-MM-DD"
+  // }
+
+  console.log("Dashboard Overview Calculated:", {
+    totalDebtLeft: parseFloat(totalDebtLeft.toFixed(2)),
+    totalDebtPaid: parseFloat(totalDebtPaid.toFixed(2)),
+    totalOriginalDebt: parseFloat(totalOriginalDebt.toFixed(2)),
+    overallProgressPercentage: parseFloat(overallProgressPercentage.toFixed(2)),
+    // nextOverallPaymentDate: nextOverallPaymentDate,
+    debtBalanceHistory: debtBalanceHistory1
+  });
 
   return {
     totalDebtLeft: parseFloat(totalDebtLeft.toFixed(2)),
     totalDebtPaid: parseFloat(totalDebtPaid.toFixed(2)),
     totalOriginalDebt: parseFloat(totalOriginalDebt.toFixed(2)),
     overallProgressPercentage: parseFloat(overallProgressPercentage.toFixed(2)),
-    nextOverallPaymentDate: nextOverallPaymentDate,
+    // nextOverallPaymentDate: nextOverallPaymentDate,
+    debtBalanceHistory: debtBalanceHistory1
   };
 };
 
 export default function Home() {
-  // Use useState for the entire dashboardData so it can be updated
+ 
   const [dashboardData, setDashboardData] = useState<DashboardData>(initialDashboardData);
+  const [isAddDebtModalOpen, setIsAddDebtModalOpen] = useState(false);
 
-  // monthlyIncome and allocatedIncome can still be derived or managed separately if needed,
-  // but it's often cleaner if they are part of the main dashboardData state updates.
-  // For now, let's keep them as derived states from dashboardData.
   const monthlyIncome = dashboardData.userProfile.monthlyIncome.toFixed(2);
   const allocatedIncome = dashboardData.userProfile.allocatedIncomePercentage.toFixed(1);
 
-  // --- Handlers for Summary Component updates ---
   const handleSetMonthlyIncome = (newValue: string) => {
     const newMonthlyIncome = parseFloat(newValue);
     setDashboardData(prevData => {
@@ -162,14 +205,13 @@ export default function Home() {
 
   // --- Handler for DebtCard updates ---
   const handleUpdateDebt = (updatedDebt: Debt) => {
+    let updatedDebtId = updatedDebt.id;
     setDashboardData(prevData => {
-      // Find the specific debt by ID and replace it with the updated version
       const updatedDebts = prevData.debts.map(debt =>
         debt.id === updatedDebt.id ? updatedDebt : debt
       );
 
-      // Recalculate the entire dashboard overview since a debt has changed
-      const newOverview = calculateDashboardOverview(updatedDebts, prevData.userProfile.monthlyIncome);
+      const newOverview = calculateDashboardOverview(updatedDebts, prevData.userProfile.monthlyIncome, updatedDebtId);
 
       const a = {
         ...prevData,
@@ -187,6 +229,52 @@ export default function Home() {
     });
   };
 
+  const handleOpenAddDebtModal = () => {
+      setIsAddDebtModalOpen(true);
+  };
+
+  const handleCloseAddDebtModal = () => {
+      setIsAddDebtModalOpen(false);
+  };
+
+   const handleSaveNewDebt = (debtData: any) => {
+    console.log('New Debt Data to Save:', debtData);
+
+   
+    const newDebt: Debt = {
+      id: crypto.randomUUID(),
+      lenderName: debtData.lenderName,
+      type: debtData.type,
+      originalDebt: parseFloat(debtData.originalDebt),
+      remainingDebt: parseFloat(debtData.originalDebt),
+      amountPaid: 0,
+      percentageCompleted: 0,
+      interestRate: parseFloat(debtData.interestRate),
+      minimumPayment: parseFloat(debtData.minimumPayment),
+      paymentHistory: [],
+      ...(debtData.loanTermMonths && !isNaN(parseFloat(debtData.loanTermMonths))) && { loanTermMonths: parseInt(debtData.loanTermMonths) },
+      ...(debtData.creditLimit && !isNaN(parseFloat(debtData.creditLimit))) && { creditLimit: parseFloat(debtData.creditLimit) }
+    };
+
+    setDashboardData(prevData => {
+        const updatedDebts = [...prevData.debts, newDebt];
+        const newOverview = calculateDashboardOverview(updatedDebts, prevData.userProfile.monthlyIncome);
+
+        // console.log("Updated Dashboard Data:", {
+        //     ...prevData,
+        //     debts: updatedDebts,
+        //     dashboardOverview: newOverview,
+        // });
+
+        return {
+            ...prevData,
+            debts: updatedDebts,
+            dashboardOverview: newOverview,
+        };
+    });
+    handleCloseAddDebtModal();
+  };
+
   return (
     <>
       <Header />
@@ -198,23 +286,36 @@ export default function Home() {
               setMonthlyIncome={handleSetMonthlyIncome}
               allocatedIncome={allocatedIncome}
               setAllocatedIncome={handleSetAllocatedIncome}
-              // Pass the dashboardOverview from the state
+              
               dashboardOverview={dashboardData.dashboardOverview}
             />
-            <TabSlider />
+            <TabSlider 
+              userProfile={dashboardData.userProfile}
+              debts={dashboardData.debts}
+              dashboardOverview={dashboardData.dashboardOverview}
+            />
           </div>
 
           <div id="right-div">
-            <Achievements />
+            {/* <Achievements /> */}
+            <button onClick={handleOpenAddDebtModal}>Add Debt</button>
+            {isAddDebtModalOpen && (
+                <AddDebtModal
+                    onClose={handleCloseAddDebtModal}
+                    onSave={handleSaveNewDebt}
+                />
+            )}
             {/* Map over the debts array to render DebtCard for each one */}
             <div className="scrollable-debt-list">
-              {dashboardData.debts.map((debtItem: Debt) => (
-                <DebtCard
-                  key={debtItem.id} // Essential for React lists
-                  debt={debtItem} // Pass the individual debt object
-                  onUpdateDebt={handleUpdateDebt} // Pass the update handler
-                />
-              ))}
+              {dashboardData.debts.map((debtItem: Debt) => {
+                return (
+                  <DebtCard
+                    key={debtItem.id}
+                    debt={debtItem}
+                    onUpdateDebt={handleUpdateDebt}
+                  />
+                );
+              })}
             </div>
             
           </div>

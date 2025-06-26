@@ -1,10 +1,14 @@
 import React, { useState, useRef, useEffect, MouseEvent } from "react";
+import Progress from "./Progress";
+import YourPlan from "./YourPlan";
+import { DashboardData } from "@/types/interface";
 
-const TabSlider = () => {
+
+const TabSlider: React.FC<DashboardData> = ({ dashboardOverview }) => {
   const renderTabContent = () => {
     switch (activeTab) {
       case "progress":
-        return <p>Your current repayment progress is on track. Keep going!</p>;
+        return <Progress {...dashboardOverview} />;
       case "debts":
         return (
           <ul>
@@ -14,13 +18,7 @@ const TabSlider = () => {
           </ul>
         );
       case "plan":
-        return (
-          <ol>
-            <li>June 15 — Pay $500</li>
-            <li>July 15 — Pay $500</li>
-            <li>Aug 15 — Pay $500</li>
-          </ol>
-        );
+        return (<YourPlan />);
       default:
         return null;
     }
@@ -37,12 +35,12 @@ const TabSlider = () => {
           >
             Progress
           </span>
-          <span
+          {/* <span
             className={`tab ${activeTab === "debts" ? "active" : ""}`}
             onClick={() => setActiveTab("debts")}
           >
             Your Debts
-          </span>
+          </span> */}
           <span
             className={`tab ${activeTab === "plan" ? "active" : ""}`}
             onClick={() => setActiveTab("plan")}

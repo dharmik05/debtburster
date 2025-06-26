@@ -7,7 +7,7 @@ interface DashboardOverview {
   totalDebtPaid: number;
   totalOriginalDebt: number;
   overallProgressPercentage: number;
-  nextOverallPaymentDate: string | null; // ISO string format "YYYY-MM-DD"
+  // nextOverallPaymentDate: string | null; // ISO string format "YYYY-MM-DD"
 }
 
 interface SummaryProps {
@@ -163,17 +163,19 @@ const Summary: React.FC<SummaryProps> = ({
   };
 
   // Format the next payment date for display
-  const nextPaymentDateFormatted = dashboardOverview.nextOverallPaymentDate
-    ? new Date(dashboardOverview.nextOverallPaymentDate).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      })
-    : 'N/A'; 
+  // const nextPaymentDateFormatted = dashboardOverview.nextOverallPaymentDate
+  //   ? new Date(dashboardOverview.nextOverallPaymentDate).toLocaleDateString('en-US', {
+  //       year: 'numeric',
+  //       month: 'short',
+  //       day: 'numeric',
+  //     })
+  //   : 'N/A'; 
 
-  // const isCurrentlyEditable = editBtnValue === "Done";
+  const paid = dashboardOverview.totalDebtPaid;
+  const left = dashboardOverview.totalDebtLeft;
+  const total = paid + left;
 
-  let percentage = (Number(dashboardOverview.totalDebtPaid.toFixed(2)) / Number(dashboardOverview.totalDebtLeft.toFixed(2))) * 100;
+  let percentage = total === 0 ? 0 : (paid / total)*100;
 
   return (
     <>
@@ -187,7 +189,8 @@ const Summary: React.FC<SummaryProps> = ({
                 <p className="label">debt left</p>
               </div>
               <div className="debt-box top-box">
-                <p className="amount">{nextPaymentDateFormatted}</p>
+                {/* <p className="amount">{nextPaymentDateFormatted}</p> */}
+                <p className="amount">sjan</p>
                 <p className="label">next date</p>
               </div>
               <div className="debt-box top-box">

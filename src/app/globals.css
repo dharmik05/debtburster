@@ -11,7 +11,7 @@ body {
 }
 
 .scrollable-debt-list {
-  overflow-y: auto;
+  /* overflow-y: auto; */
   display: flex;
   /* max-height: 400px; */
   flex-direction: column;
@@ -154,9 +154,9 @@ body {
 #right-div {
   width: 100%;
   height: 100vh;
-  display: grid;
-  grid-template-rows: 1fr 5fr;
-  gap: 1em;
+  /* display: grid; */
+  /* grid-template-rows: 1fr 5fr; */
+  /* gap: 1em; */
 }
 
 #parent {
@@ -366,6 +366,7 @@ input[type="number"] {
   font-weight: 300;
   min-height: 150px;
 }
+
 .figma-chatbox {
   position: fixed;
   bottom: 80px;
@@ -874,4 +875,152 @@ input[type="number"] {
 
 .no-history-message {
   color: #939393; /* Message text color */
+}
+
+/* Progress */
+.progress-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.line-chart {
+  width: 100%;
+  height: 400px;
+}
+
+/* AddDebtModal.css */
+
+.modal-backdrop {
+    position: fixed; /* Stays fixed relative to the viewport */
+    top: 0;
+    left: 0;
+    width: 100vw; /* Full viewport width */
+    height: 100vh; /* Full viewport height */
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top of everything */
+}
+
+.modal-content {
+    background-color: #333; /* Dark background similar to your existing UI */
+    color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    max-width: 500px; /* Max width for readability */
+    position: relative; /* For positioning the close button */
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between header, form, etc. */
+    overflow-y: auto; /* Enable scrolling if content is too long */
+    max-height: 90vh; /* Don't let it exceed viewport height */
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #555;
+    margin-bottom: 15px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: white;
+}
+
+.modal-close-button {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #ccc;
+    cursor: pointer;
+    line-height: 1; /* Prevents extra space around the X */
+    padding: 0 5px;
+    transition: color 0.2s ease;
+}
+
+.modal-close-button:hover {
+    color: white;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between form groups */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #e0e0e0;
+}
+
+.form-group input {
+    padding: 10px 12px;
+    border: 1px solid #555;
+    border-radius: 6px;
+    background-color: #444;
+    color: white;
+    font-size: 1rem;
+    outline: none; /* Remove default focus outline */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus {
+    border-color: #777;
+    box-shadow: 0 0 0 2px rgba(119, 119, 119, 0.3); /* Subtle glow on focus */
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 10px;
+    margin-top: 20px; /* Space above buttons */
+}
+
+.save-button,
+.cancel-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.save-button {
+    background-color: #007bff; /* Blue for save */
+    color: white;
+}
+
+.save-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+.cancel-button {
+    background-color: #6c757d; /* Gray for cancel */
+    color: white;
+}
+
+.cancel-button:hover {
+    background-color: #5a6268;
+    transform: translateY(-1px);
 }

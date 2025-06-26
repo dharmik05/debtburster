@@ -1,22 +1,24 @@
 // components/DebtDetails.tsx
 import React from 'react';
 
-// Assuming your Debt interface is defined in src/types.ts
-// If not, please ensure it's accessible or defined here.
 interface Debt {
   id: string;
   lenderName: string;
-  type: string; // Used as "Loan Name"
-  originalDebt: number; // "Total Loan Cost"
+  type: string;
+  originalDebt: number;
   remainingDebt: number;
   amountPaid: number;
   percentageCompleted: number;
   interestRate: number;
   minimumPayment: number;
   paymentHistory: Array<{ date: string; amount: number; }>;
-  expectedPaymentDates: string[];
+  // expectedPaymentDates: string[];
   loanTermMonths?: number;
   creditLimit?: number;
+  debtBalanceHistory?: Array<{
+    date: string;
+    remainingDebt: number;
+  }>;
 }
 
 interface DebtDetailsProps {

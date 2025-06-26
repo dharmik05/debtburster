@@ -3,36 +3,33 @@ import React, { useState, useRef, useEffect } from 'react';
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  // MODIFIED: onConfirmPayment now takes paymentAmount and paymentDate
   onConfirmPayment: (paymentAmount: number, paymentDate: string) => void;
   debtType: string;
   lenderName: string;
   remainingDebt: number;
 }
 
-// Helper to get today's date in YYYY-MM-DD format
 const getTodayDateString = () => {
   const today = new Date();
   const year = today.getFullYear();
-  const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
+  const month = (today.getMonth() + 1).toString().padStart(2, '0');
   const day = today.getDate().toString().padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
 
 const PaymentModal: React.FC<PaymentModalProps> = ({
   isOpen,
-  onClose,
+  onClose,  
   onConfirmPayment,
   debtType,
   lenderName,
   remainingDebt,
 }) => {
   const [paymentAmount, setPaymentAmount] = useState<string>('');
-  // NEW STATE: For the payment date, initialized to today
   const [paymentDate, setPaymentDate] = useState<string>(getTodayDateString());
   
-  const amountInputRef = useRef<HTMLInputElement>(null); // Renamed for clarity
-  const dateInputRef = useRef<HTMLInputElement>(null); // NEW REF for date input
+  const amountInputRef = useRef<HTMLInputElement>(null);
+  const dateInputRef = useRef<HTMLInputElement>(null);
 
   // Focus the amount input field when the modal opens
   useEffect(() => {
@@ -44,8 +41,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   // Reset payment amount and date when modal closes or opens
   useEffect(() => {
     if (!isOpen) {
-      setPaymentAmount(''); // Clear amount input when modal closes
-      setPaymentDate(getTodayDateString()); // Reset date to today
+      setPaymentAmount('');
+      setPaymentDate(getTodayDateString());
     }
   }, [isOpen]);
 
@@ -58,7 +55,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     }
   };
 
-  // NEW HANDLER: For date input change
+  // For date input change
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPaymentDate(e.target.value);
   };
@@ -66,26 +63,26 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   const handleConfirm = () => {
     const amount = parseFloat(paymentAmount);
     const selectedDate = new Date(paymentDate);
-    const today = new Date(getTodayDateString()); // Compare against a normalized today
+    const today = new Date(getTodayDateString());
 
     if (isNaN(amount) || amount <= 0) {
       alert('Please enter a valid payment amount greater than zero.');
       return;
     }
     
-    // NEW VALIDATION: Check if payment amount exceeds remaining debt
+    // Check if payment amount exceeds remaining debt
     if (amount > remainingDebt) {
         alert(`Payment amount ($${amount.toFixed(2)}) cannot exceed remaining debt ($${remainingDebt.toFixed(2)}).`);
         return;
     }
 
-    // NEW VALIDATION: Ensure date is not in the future
+    // Ensure date is not in the future
     if (selectedDate > today) {
       alert('Payment date cannot be in the future.');
       return;
     }
 
-    // MODIFIED: Call onConfirmPayment with both amount and date
+    // Call onConfirmPayment with both amount and date
     onConfirmPayment(amount, paymentDate); 
   };
 
@@ -112,7 +109,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
           <input
             type="text"
             id="paymentAmount"
-            ref={amountInputRef} // Using the renamed ref
+            ref={amountInputRef}
             value={paymentAmount}
             onChange={handleAmountChange}
             placeholder="e.g., 50.00"
@@ -121,16 +118,16 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
           />
         </div>
 
-        {/* NEW INPUT GROUP: For Payment Date */}
+        {/* For Payment Date */}
         <div className="modal-input-group">
           <label htmlFor="paymentDate">Payment Date:</label>
           <input
-            type="date" // This is the magic!
+            type="date"
             id="paymentDate"
-            ref={dateInputRef} // Assign ref
+            ref={dateInputRef}
             value={paymentDate}
             onChange={handleDateChange}
-            max={getTodayDateString()} // Prevent future dates from being easily selected
+            max={getTodayDateString()}
           />
         </div>
 
