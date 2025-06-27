@@ -1,10 +1,8 @@
 "use client";
-import styles from "./page.module.css";
 import { useState } from "react";
 import initialDashboardData from "../dashboardData.json";
 import ChatIcon from "../components/ChatIcon";
 import TabSlider from "../components/TabSlider";
-import Achievements from "../components/Achievements";
 import DebtCard from "../components/DebtCard";
 import Header from "../components/Header";
 import Summary from "../components/Summary";
@@ -57,43 +55,11 @@ interface DashboardData {
   dashboardOverview: DashboardOverview;
 }
 
-interface AddDebtFormData {
-    lenderName: string;
-    type: string;
-    originalDebt: string;
-    interestRate: string;
-    minimumPayment: string;
-    loanTermMonths?: string;
-    creditLimit?: string;
-}
-
-const getNextDebtPaymentDate = (dates: string[]): string | null => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const futureDates = dates
-    .map(dateStr => new Date(dateStr))
-    .filter(date => date >= today);
-
-  if (futureDates.length === 0) {
-    return null;
-  }
-
-
-  const nextDate = new Date(Math.min(...futureDates.map(date => date.getTime())));
-  return nextDate.toISOString().split('T')[0]; 
-};
-
 
 const calculateDashboardOverview = (debts: Debt[], monthlyIncome: number, updatedDebtId?: string): DashboardOverview => {
   let totalDebtLeft = 0;
   let totalDebtPaid = 0;
   let totalOriginalDebt = 0;
-  let allExpectedPaymentDates: Date[] = [];
-  let debtBalanceHistory: Array<{
-    date: string;
-    remainingDebt: number;
-  }> = [];
   let debtBalanceHistory1 = initialDashboardData.dashboardOverview.debtBalanceHistory || [];
 
   const today = new Date();

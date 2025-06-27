@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import Chart from "chart.js/auto";
-import { DashboardOverview, DebtProps } from "@/types/interface";
-
+import { DashboardOverview } from "@/types/interface";
 
 
 const Progress: React.FC<DashboardOverview> = ({ debtBalanceHistory }) => {
