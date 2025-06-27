@@ -1024,3 +1024,9 @@ input[type="number"] {
     background-color: #5a6268;
     transform: translateY(-1px);
 }
+
+/* Your Plan */
+#ai-plan {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}

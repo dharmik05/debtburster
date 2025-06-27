@@ -50,9 +50,6 @@ const Progress: React.FC<DashboardOverview> = ({ debtBalanceHistory }) => {
                                 stepSize: 4
                             }
                         },
-                        x: {
-                            type: 'time'
-                        }
                     }
             }
             });

@@ -4,7 +4,7 @@ import YourPlan from "./YourPlan";
 import { DashboardData } from "@/types/interface";
 
 
-const TabSlider: React.FC<DashboardData> = ({ dashboardOverview }) => {
+const TabSlider: React.FC<DashboardData> = ({ userProfile, debts, dashboardOverview }) => {
   const renderTabContent = () => {
     switch (activeTab) {
       case "progress":
@@ -18,7 +18,7 @@ const TabSlider: React.FC<DashboardData> = ({ dashboardOverview }) => {
           </ul>
         );
       case "plan":
-        return (<YourPlan />);
+        return (<YourPlan debts={debts} userProfile={userProfile}/>);
       default:
         return null;
     }

@@ -115,14 +115,33 @@ const calculateDashboardOverview = (debts: Debt[], monthlyIncome: number, update
     // });
   });
 
-  if(updatedDebtId) {
-    debts.forEach(debt => {
-      if (debt.id === updatedDebtId) {
-        let { date, amount: amountPaid } = debt.paymentHistory[debt.paymentHistory.length - 1];
-        debtBalanceHistory1.push({date, remainingDebt: totalDebtLeft});
-      }
-    })
-  }
+  // if(updatedDebtId) {
+  //   debts.forEach(debt => {
+  //     if (debt.id === updatedDebtId) {
+  //       let { date, amount: amountPaid } = debt.paymentHistory[debt.paymentHistory.length - 1];
+  //       debtBalanceHistory1.push({date, remainingDebt: totalDebtLeft});
+  //     }
+  //   })
+  // }
+
+  if (updatedDebtId) {
+  debts.forEach(debt => {
+    if (debt.id === updatedDebtId) {
+      let { date } = debt.paymentHistory[debt.paymentHistory.length - 1];
+      debtBalanceHistory1.push({ date, remainingDebt: totalDebtLeft });
+    }
+  });
+  // Deduplicate: keep only the last entry for each date
+  debtBalanceHistory1 = debtBalanceHistory1.reduce((acc: { date: string; remainingDebt: number }[], curr) => {
+    const idx = acc.findIndex(item => item.date === curr.date);
+    if (idx === -1) {
+      acc.push(curr);
+    } else {
+      acc[idx] = curr; // Replace with the latest
+    }
+    return acc;
+  }, []);
+}
 
 
   const overallProgressPercentage = totalOriginalDebt > 0

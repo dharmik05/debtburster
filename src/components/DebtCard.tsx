@@ -12,12 +12,12 @@ interface Debt {
   percentageCompleted: number;
   interestRate: number;
   minimumPayment: number;
-  nextPaymentDate: string | null;
+  nextPaymentDate?: string | null;
   paymentHistory: Array<{
     date: string;
     amount: number;
   }>;
-  expectedPaymentDates: string[];
+  expectedPaymentDates?: string[];
   loanTermMonths?: number;
   creditLimit?: number;
 }
