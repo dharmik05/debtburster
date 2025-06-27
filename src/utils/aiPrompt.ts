@@ -1,5 +1,3 @@
-import { userAgent } from "next/server";
-
 interface DebtInfo {
     id: string;
     lenderName: string;

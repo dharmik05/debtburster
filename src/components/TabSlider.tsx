@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, MouseEvent } from "react";
+import React, { useState } from "react";
 import Progress from "./Progress";
 import YourPlan from "./YourPlan";
 import { DashboardData } from "@/types/interface";

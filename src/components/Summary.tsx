@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import CircularBar from "./CircularBar";
-import dashboardData from "../dashboardData.json";
+// import dashboardData from "../dashboardData.json";
 
 interface DashboardOverview {
   totalDebtLeft: number;
@@ -43,7 +43,7 @@ const Summary: React.FC<SummaryProps> = ({
   const [currentMonthlyIncome, setCurrentMonthlyIncome] = useState(monthlyIncome);
   const [currentAllocatedIncome, setCurrentAllocatedIncome] = useState(allocatedIncome);
 
-  const [contentEditable, setContentEditable] = useState(false);
+  // const [contentEditable, setContentEditable] = useState(false);
 
   const monthlyIncomeSpanRef = useRef<HTMLSpanElement>(null);
   const allocatedIncomeSpanRef = useRef<HTMLSpanElement>(null);
@@ -175,7 +175,7 @@ const Summary: React.FC<SummaryProps> = ({
   const left = dashboardOverview.totalDebtLeft;
   const total = paid + left;
 
-  let percentage = total === 0 ? 0 : (paid / total)*100;
+  const percentage = total === 0 ? 0 : (paid / total)*100;
 
   return (
     <>
