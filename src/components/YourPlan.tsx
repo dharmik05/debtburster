@@ -68,10 +68,10 @@ Suggestions to help the user become debt-free faster:
     <>
         <div>
           <button onClick={fetchPlan}>fetch</button>
-          {/* <pre>{plan}</pre> */}
-          <pre id="ai-plan">
+          <pre id="ai-plan">{plan}</pre>
+          {/* <pre id="ai-plan">
             {text}
-          </pre>
+          </pre> */}
         </div>
     </>
     
