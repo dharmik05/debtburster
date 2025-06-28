@@ -4,7 +4,7 @@ import {OpenAI} from "openai"
 import { generateDebtPlanPrompt } from "@/utils/aiPrompt";
 console.log("Initializing OpenAI client...");
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_APIKEY });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function POST(req: Request) {
   try{

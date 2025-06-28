@@ -77,10 +77,10 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     }
 
     // Ensure date is not in the future
-    if (selectedDate > today) {
-      alert('Payment date cannot be in the future.');
-      return;
-    }
+    // if (selectedDate > today) {
+    //   alert('Payment date cannot be in the future.');
+    //   return;
+    // }
 
     // Call onConfirmPayment with both amount and date
     onConfirmPayment(amount, paymentDate); 
@@ -127,7 +127,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             ref={dateInputRef}
             value={paymentDate}
             onChange={handleDateChange}
-            max={getTodayDateString()}
+            // max={getTodayDateString()}
           />
         </div>
 

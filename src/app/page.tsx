@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, createContext } from "react";
 import initialDashboardData from "../dashboardData.json";
 import ChatIcon from "../components/ChatIcon";
 import TabSlider from "../components/TabSlider";
@@ -7,6 +7,7 @@ import DebtCard from "../components/DebtCard";
 import Header from "../components/Header";
 import Summary from "../components/Summary";
 import AddDebtModal from "@/components/AddDebtModal";
+import DataContext from "@/context/DataContext";
 
 interface Debt {
   id: string;
@@ -54,7 +55,6 @@ interface DashboardData {
   debts: Debt[];
   dashboardOverview: DashboardOverview;
 }
-
 
 const calculateDashboardOverview = (debts: Debt[], monthlyIncome: number, updatedDebtId?: string): DashboardOverview => {
   let totalDebtLeft = 0;
@@ -143,7 +143,10 @@ const calculateDashboardOverview = (debts: Debt[], monthlyIncome: number, update
 export default function Home() {
  
   const [dashboardData, setDashboardData] = useState<DashboardData>(initialDashboardData);
-  const [isAddDebtModalOpen, setIsAddDebtModalOpen] = useState(false);
+  const [isAddDebtModalOpen, setIsAddDebtModalOpen] = useState<boolean>(false);
+
+  // Add aiPlan state for DataContext.Provider
+  const [aiPlan, setAiPlan] = useState<any>(null);
 
   const monthlyIncome = dashboardData.userProfile.monthlyIncome.toFixed(2);
   const allocatedIncome = dashboardData.userProfile.allocatedIncomePercentage.toFixed(1);
@@ -260,53 +263,63 @@ export default function Home() {
     handleCloseAddDebtModal();
   };
 
+  const aiChatData = {
+    monthlyIncome: dashboardData.userProfile.monthlyIncome,
+    allocatedIncomePercentage: dashboardData.userProfile.allocatedIncomePercentage,
+    totalDebtLeft: dashboardData.dashboardOverview.totalDebtLeft,
+    totalOriginalDebt: dashboardData.dashboardOverview.totalOriginalDebt,
+  }
+
   return (
     <>
-      <Header />
-      <div className="main-container">
-        <div id="parent">
-          <div id="left-div">
-            <Summary
-              monthlyIncome={monthlyIncome}
-              setMonthlyIncome={handleSetMonthlyIncome}
-              allocatedIncome={allocatedIncome}
-              setAllocatedIncome={handleSetAllocatedIncome}
-              
-              dashboardOverview={dashboardData.dashboardOverview}
-            />
-            <TabSlider 
-              userProfile={dashboardData.userProfile}
-              debts={dashboardData.debts}
-              dashboardOverview={dashboardData.dashboardOverview}
-            />
-          </div>
-
-          <div id="right-div">
-            {/* <Achievements /> */}
-            <button onClick={handleOpenAddDebtModal}>Add Debt</button>
-            {isAddDebtModalOpen && (
-                <AddDebtModal
-                    onClose={handleCloseAddDebtModal}
-                    onSave={handleSaveNewDebt}
-                />
-            )}
-            {/* Map over the debts array to render DebtCard for each one */}
-            <div className="scrollable-debt-list">
-              {dashboardData.debts.map((debtItem: Debt) => {
-                return (
-                  <DebtCard
-                    key={debtItem.id}
-                    debt={debtItem}
-                    onUpdateDebt={handleUpdateDebt}
-                  />
-                );
-              })}
+      <DataContext.Provider value={{aiPlan, setAiPlan}}>
+        <Header />
+        <div className="main-container">
+          
+          <div id="parent">
+            <div id="left-div">
+              <Summary
+                monthlyIncome={monthlyIncome}
+                setMonthlyIncome={handleSetMonthlyIncome}
+                allocatedIncome={allocatedIncome}
+                setAllocatedIncome={handleSetAllocatedIncome}
+                
+                dashboardOverview={dashboardData.dashboardOverview}
+              />
+              <TabSlider 
+                userProfile={dashboardData.userProfile}
+                debts={dashboardData.debts}
+                dashboardOverview={dashboardData.dashboardOverview}
+              />
             </div>
-            
+
+            <div id="right-div">
+              {/* <Achievements /> */}
+              <button onClick={handleOpenAddDebtModal}>Add Debt</button>
+              {isAddDebtModalOpen && (
+                  <AddDebtModal
+                      onClose={handleCloseAddDebtModal}
+                      onSave={handleSaveNewDebt}
+                  />
+              )}
+              {/* Map over the debts array to render DebtCard for each one */}
+              <div className="scrollable-debt-list">
+                {dashboardData.debts.map((debtItem: Debt) => {
+                  return (
+                    <DebtCard
+                      key={debtItem.id}
+                      debt={debtItem}
+                      onUpdateDebt={handleUpdateDebt}
+                    />
+                  );
+                })}
+              </div>
+              
+            </div>
           </div>
         </div>
-      </div>
-      <ChatIcon />
+        <ChatIcon userData={aiChatData}/>
+      </DataContext.Provider>
     </>
   );
 }

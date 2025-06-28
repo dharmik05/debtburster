@@ -18,7 +18,7 @@ const TabSlider: React.FC<DashboardData> = ({ userProfile, debts, dashboardOverv
           </ul>
         );
       case "plan":
-        return (<YourPlan debts={debts} userProfile={userProfile}/>);
+        return (<YourPlan debts={debts} userProfile={userProfile} />);
       default:
         return null;
     }

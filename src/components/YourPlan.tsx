@@ -1,5 +1,7 @@
 import { Debt, UserProfile } from "@/types/interface";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import DataContext from "@/context/DataContext";
+import { send } from "process";
 
 interface YourPlanProps {
   debts: Debt[];
@@ -7,6 +9,11 @@ interface YourPlanProps {
 }
 
 const YourPlan: React.FC<YourPlanProps> = ({ debts, userProfile }) => {
+
+  const context = useContext(DataContext);
+  if (!context) throw new Error("YourPlan must be used within DataContext.Provider");
+  const { setAiPlan } = context;
+
   console.log("YourPlan component props:", debts, userProfile);
   const [plan, setPlan] = useState("");
 
@@ -33,6 +40,7 @@ const YourPlan: React.FC<YourPlanProps> = ({ debts, userProfile }) => {
       setPlan(data.plan || "No plan generated");
 
       console.log("Plan fetched successfully:", data.plan);
+      setAiPlan(data.plan || "No plan generated");
 
     } catch (error) {
       console.error("Error fetching plan:", error);
@@ -45,10 +53,7 @@ const YourPlan: React.FC<YourPlanProps> = ({ debts, userProfile }) => {
     <>
         <div>
           <button onClick={fetchPlan}>fetch</button>
-          <pre id="ai-plan">{plan}</pre>
-          {/* <pre id="ai-plan">
-            {text}
-          </pre> */}
+          <pre id="ai-res">{plan}</pre>
         </div>
     </>
     
