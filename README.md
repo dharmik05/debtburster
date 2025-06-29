@@ -1,6 +1,6 @@
 DebtBuster is a web app that helps users track their debts and payments, generate personalized AI repayment plans using OpenAI's API, and get instant answers through an integrated AI chatbot. The chatbot is designed to help users understand and clarify any doubts regarding their AI-generated financial plans.
 
-## 🚀 Features
+## Features
 
 - Add and track multiple debts
 - Visual summary of outstanding balances
@@ -9,7 +9,7 @@ DebtBuster is a web app that helps users track their debts and payments, generat
 - Responsive and user-friendly interface
 
 
-## 📦 Installation
+## Installation
 
 1. **Clone the repository**
 
@@ -40,7 +40,7 @@ DebtBuster is a web app that helps users track their debts and payments, generat
 
    The app will be available at `http://localhost:3000`.
 
-## 📁 File Structure
+## File Structure
 
 ```
 debtbuster/
@@ -52,7 +52,7 @@ debtbuster/
 ├── README.md
 ```
 
-## 🧠 Powered by
+## Powered by
 
 - [OpenAI](https://platform.openai.com/)
 - [Next.js](https://nextjs.org/)
