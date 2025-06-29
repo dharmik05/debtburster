@@ -48,11 +48,34 @@ const YourPlan: React.FC<YourPlanProps> = ({ debts, userProfile }) => {
 
   };
 
+  const [isRotating, setIsRotating] = useState(false);
+  
+  const getPlan = () => {
+    setIsRotating(true);
+    setTimeout(() => {
+      setIsRotating(false);
+    }, 600);
+  };  
 
   return (
     <>
         <div>
-          <button onClick={fetchPlan}>fetch</button>
+          <div>
+
+          </div>
+          <div className="fetch-div" onClick={()=> {
+            fetchPlan();
+            getPlan();
+          }}>
+            <p>Generate Plan</p>
+            <img
+              src="/reload.svg" 
+              id="reload-img"
+              className={`generate-plan-img ${isRotating ? "rotate" : ""}`}
+              style={{ cursor: "pointer" }}
+            />
+          </div>          
+          
           <pre id="ai-res">{plan}</pre>
         </div>
     </>

@@ -190,7 +190,7 @@ const Summary: React.FC<SummaryProps> = ({
               </div>
               <div className="debt-box top-box">
                 {/* <p className="amount">{nextPaymentDateFormatted}</p> */}
-                <p className="amount">sjan</p>
+                <p className="amount">July 1st, 2025</p>
                 <p className="label">next date</p>
               </div>
               <div className="debt-box top-box">

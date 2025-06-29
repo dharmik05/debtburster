@@ -8,6 +8,7 @@ import Header from "../components/Header";
 import Summary from "../components/Summary";
 import AddDebtModal from "@/components/AddDebtModal";
 import DataContext from "@/context/DataContext";
+import React from "react";
 
 interface Debt {
   id: string;
@@ -295,7 +296,10 @@ export default function Home() {
 
             <div id="right-div">
               {/* <Achievements /> */}
-              <button onClick={handleOpenAddDebtModal}>Add Debt</button>
+              <div className="active-debts-header">
+                <h2>Active Debts</h2>
+                <button className="btn add-debt-btn" onClick={handleOpenAddDebtModal}>Add Debt</button>
+              </div>
               {isAddDebtModalOpen && (
                   <AddDebtModal
                       onClose={handleCloseAddDebtModal}
@@ -306,11 +310,14 @@ export default function Home() {
               <div className="scrollable-debt-list">
                 {dashboardData.debts.map((debtItem: Debt) => {
                   return (
+                    <React.Fragment key={debtItem.id}>
                     <DebtCard
-                      key={debtItem.id}
                       debt={debtItem}
                       onUpdateDebt={handleUpdateDebt}
                     />
+                    {/* <hr /> */}
+                  </React.Fragment>
+                    
                   );
                 })}
               </div>
