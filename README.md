@@ -1,4 +1,4 @@
-DebtBurster is a web app that helps users track their debts and payments, generate personalized AI repayment plans using OpenAI's API, and get instant answers through an integrated AI chatbot. The chatbot is designed to help users understand and clarify any doubts regarding their AI-generated financial plans.
+DebtBuster is a web app that helps users track their debts and payments, generate personalized AI repayment plans using OpenAI's API, and get instant answers through an integrated AI chatbot. The chatbot is designed to help users understand and clarify any doubts regarding their AI-generated financial plans.
 
 ## Features
 
@@ -14,8 +14,8 @@ DebtBurster is a web app that helps users track their debts and payments, genera
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/dharmik05/debtburster.git
-   cd debtburster
+   git clone https://github.com/dharmik05/debtbuster.git
+   cd debtbuster
    ```
 
 2. **Install dependencies**
@@ -43,7 +43,7 @@ DebtBurster is a web app that helps users track their debts and payments, genera
 ## File Structure
 
 ```
-debtburster/
+debtbuster/
 ├── .env
 ├── public/
 ├── src/
