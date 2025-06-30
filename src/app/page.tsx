@@ -24,7 +24,6 @@ interface Debt {
     date: string;
     amount: number;
   }>;
-  // expectedPaymentDates: string[];
   loanTermMonths?: number;
   creditLimit?: number;
   debtBalanceHistory?: Array<{
@@ -44,7 +43,6 @@ interface DashboardOverview {
   totalDebtPaid: number;
   totalOriginalDebt: number;
   overallProgressPercentage: number;
-  // nextOverallPaymentDate: string | null;
   debtBalanceHistory: Array<{
     date: string;
     remainingDebt: number;
@@ -72,24 +70,7 @@ const calculateDashboardOverview = (debts: Debt[], monthlyIncome: number, update
     totalDebtLeft += debt.remainingDebt;
     totalDebtPaid += debt.amountPaid;
     totalOriginalDebt += debt.originalDebt;
-
-    // Collect all expected future payment dates for this debt
-    // debt.expectedPaymentDates.forEach(dateStr => {
-    //   const date = new Date(dateStr);
-    //   if (date >= today) { // Only consider future dates
-    //     allExpectedPaymentDates.push(date);
-    //   }
-    // });
   });
-
-  // if(updatedDebtId) {
-  //   debts.forEach(debt => {
-  //     if (debt.id === updatedDebtId) {
-  //       let { date, amount: amountPaid } = debt.paymentHistory[debt.paymentHistory.length - 1];
-  //       debtBalanceHistory1.push({date, remainingDebt: totalDebtLeft});
-  //     }
-  //   })
-  // }
 
   if (updatedDebtId) {
   debts.forEach(debt => {
@@ -98,13 +79,12 @@ const calculateDashboardOverview = (debts: Debt[], monthlyIncome: number, update
       debtBalanceHistory1.push({ date, remainingDebt: totalDebtLeft });
     }
   });
-  // Deduplicate: keep only the last entry for each date
   debtBalanceHistory1 = debtBalanceHistory1.reduce((acc: { date: string; remainingDebt: number }[], curr) => {
     const idx = acc.findIndex(item => item.date === curr.date);
     if (idx === -1) {
       acc.push(curr);
     } else {
-      acc[idx] = curr; // Replace with the latest
+      acc[idx] = curr;
     }
     return acc;
   }, []);
@@ -115,28 +95,11 @@ const calculateDashboardOverview = (debts: Debt[], monthlyIncome: number, update
     ? (totalDebtPaid / totalOriginalDebt) * 100
     : 0;
 
-  // Find the earliest next payment date across all debts
-  // let nextOverallPaymentDate: string | null = null;
-  // if (allExpectedPaymentDates.length > 0) {
-  //   const earliestDate = new Date(Math.min(...allExpectedPaymentDates.map(date => date.getTime())));
-  //   nextOverallPaymentDate = earliestDate.toISOString().split('T')[0]; // Format as "YYYY-MM-DD"
-  // }
-
-  console.log("Dashboard Overview Calculated:", {
-    totalDebtLeft: parseFloat(totalDebtLeft.toFixed(2)),
-    totalDebtPaid: parseFloat(totalDebtPaid.toFixed(2)),
-    totalOriginalDebt: parseFloat(totalOriginalDebt.toFixed(2)),
-    overallProgressPercentage: parseFloat(overallProgressPercentage.toFixed(2)),
-    // nextOverallPaymentDate: nextOverallPaymentDate,
-    debtBalanceHistory: debtBalanceHistory1
-  });
-
   return {
     totalDebtLeft: parseFloat(totalDebtLeft.toFixed(2)),
     totalDebtPaid: parseFloat(totalDebtPaid.toFixed(2)),
     totalOriginalDebt: parseFloat(totalOriginalDebt.toFixed(2)),
     overallProgressPercentage: parseFloat(overallProgressPercentage.toFixed(2)),
-    // nextOverallPaymentDate: nextOverallPaymentDate,
     debtBalanceHistory: debtBalanceHistory1
   };
 };
@@ -146,7 +109,6 @@ export default function Home() {
   const [dashboardData, setDashboardData] = useState<DashboardData>(initialDashboardData);
   const [isAddDebtModalOpen, setIsAddDebtModalOpen] = useState<boolean>(false);
 
-  // Add aiPlan state for DataContext.Provider
   const [aiPlan, setAiPlan] = useState<any>(null);
 
   const monthlyIncome = dashboardData.userProfile.monthlyIncome.toFixed(2);
@@ -158,10 +120,8 @@ export default function Home() {
       const updatedUserProfile = {
         ...prevData.userProfile,
         monthlyIncome: newMonthlyIncome,
-        // Recalculate allocatedIncomeAmount if it depends on monthlyIncome
         allocatedIncomeAmount: newMonthlyIncome * (prevData.userProfile.allocatedIncomePercentage / 100)
       };
-      // Recalculate overview if monthly income affects it directly, or if other parts are derived
       const newOverview = calculateDashboardOverview(prevData.debts, newMonthlyIncome);
       return {
         ...prevData,
@@ -177,7 +137,6 @@ export default function Home() {
       const updatedUserProfile = {
         ...prevData.userProfile,
         allocatedIncomePercentage: newAllocatedPercentage,
-        // Recalculate allocatedIncomeAmount
         allocatedIncomeAmount: prevData.userProfile.monthlyIncome * (newAllocatedPercentage / 100)
       };
 
@@ -186,13 +145,10 @@ export default function Home() {
         userProfile: updatedUserProfile
       };
 
-      console.log("Allocated Income Updated:", newState);
-
       return newState;
     });
   };
 
-  // --- Handler for DebtCard updates ---
   const handleUpdateDebt = (updatedDebt: Debt) => {
     let updatedDebtId = updatedDebt.id;
     setDashboardData(prevData => {
@@ -207,8 +163,6 @@ export default function Home() {
         debts: updatedDebts,
         dashboardOverview: newOverview
       }
-
-      console.log("Debt Updated:", JSON.stringify(a));
 
       return {
         ...prevData,
@@ -227,7 +181,6 @@ export default function Home() {
   };
 
    const handleSaveNewDebt = (debtData: any) => {
-    console.log('New Debt Data to Save:', debtData);
 
    
     const newDebt: Debt = {
@@ -248,12 +201,6 @@ export default function Home() {
     setDashboardData(prevData => {
         const updatedDebts = [...prevData.debts, newDebt];
         const newOverview = calculateDashboardOverview(updatedDebts, prevData.userProfile.monthlyIncome);
-
-        // console.log("Updated Dashboard Data:", {
-        //     ...prevData,
-        //     debts: updatedDebts,
-        //     dashboardOverview: newOverview,
-        // });
 
         return {
             ...prevData,

@@ -1,13 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import CircularBar from "./CircularBar";
-// import dashboardData from "../dashboardData.json";
 
 interface DashboardOverview {
   totalDebtLeft: number;
   totalDebtPaid: number;
   totalOriginalDebt: number;
   overallProgressPercentage: number;
-  // nextOverallPaymentDate: string | null; // ISO string format "YYYY-MM-DD"
 }
 
 interface SummaryProps {
@@ -19,31 +17,17 @@ interface SummaryProps {
   dashboardOverview: DashboardOverview;
 }
 
-// interface SummaryProps {
-//   monthlyIncome: string;
-//   setMonthlyIncome: React.Dispatch<React.SetStateAction<string>>;
-//   allocatedIncome: string;
-//   setAllocatedIncome: React.Dispatch<React.SetStateAction<string>>;
-// }
-
 const Summary: React.FC<SummaryProps> = ({
-  // These props will now be passed from a parent (e.g., App.tsx)
-  // and initialized there from dashboardData.
-  // For Summary.tsx itself, we remove the direct useState initializations if using props.
-  // If Summary is the top-level component that reads data initially, keep the useState here.
-  // Assuming App.tsx handles initialization based on our previous "lifting state up" discussion:
-  monthlyIncome, // Received as prop
-  setMonthlyIncome, // Received as prop
-  allocatedIncome, // Received as prop
-  setAllocatedIncome, // Received as prop
+  monthlyIncome,
+  setMonthlyIncome,
+  allocatedIncome,
+  setAllocatedIncome,
   dashboardOverview
 }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const [currentMonthlyIncome, setCurrentMonthlyIncome] = useState(monthlyIncome);
   const [currentAllocatedIncome, setCurrentAllocatedIncome] = useState(allocatedIncome);
-
-  // const [contentEditable, setContentEditable] = useState(false);
 
   const monthlyIncomeSpanRef = useRef<HTMLSpanElement>(null);
   const allocatedIncomeSpanRef = useRef<HTMLSpanElement>(null);
@@ -62,7 +46,7 @@ const Summary: React.FC<SummaryProps> = ({
     let newTip;
     do {
       newTip = tips[Math.floor(Math.random() * tips.length)];
-    } while (newTip === tip); // Prevent same tip repeating
+    } while (newTip === tip);
     setTip(newTip);
 
     setIsRotating(true);
@@ -74,19 +58,17 @@ const Summary: React.FC<SummaryProps> = ({
   
   
   const validateAndFormatNumber = (value: string): string => {
-    // Remove all non-numeric characters except for the first decimal point
     const cleaned = value.replace(/[^0-9.]/g, '');
     const parts = cleaned.split('.');
     let result = parts[0];
     if (parts.length > 1) {
-      result += '.' + parts.slice(1).join('').substring(0, 2); // Allow only two decimal places
+      result += '.' + parts.slice(1).join('').substring(0, 2);
     }
     const parsed = parseFloat(result);
-    return isNaN(parsed) ? "0.00" : parsed.toFixed(2); // Always return a string with two decimal places
+    return isNaN(parsed) ? "0.00" : parsed.toFixed(2);
   };
   
   useEffect(() => {
-    // Focus the first editable field when entering edit mode
     if (isEditing && monthlyIncomeSpanRef.current) {
       monthlyIncomeSpanRef.current.focus();
       const range = document.createRange();
@@ -99,7 +81,7 @@ const Summary: React.FC<SummaryProps> = ({
   }, [isEditing]);
 
   useEffect(() => {
-    if (!isEditing) { // Only update if not currently editing to avoid input override
+    if (!isEditing) {
       setCurrentMonthlyIncome(monthlyIncome);
       setCurrentAllocatedIncome(allocatedIncome);
     }
@@ -108,68 +90,55 @@ const Summary: React.FC<SummaryProps> = ({
   const saveChanges = () => {
     if (monthlyIncomeSpanRef.current) {
       const validatedMonthlyIncome = validateAndFormatNumber(monthlyIncomeSpanRef.current.innerText);
-      setMonthlyIncome(validatedMonthlyIncome); // Update parent state
+      setMonthlyIncome(validatedMonthlyIncome);
     }
     if (allocatedIncomeSpanRef.current) {
       const validatedAllocatedIncome = validateAndFormatNumber(allocatedIncomeSpanRef.current.innerText);
-      setAllocatedIncome(validatedAllocatedIncome); // Update parent state
+      setAllocatedIncome(validatedAllocatedIncome);
     }
-    setIsEditing(false); // Exit editing mode
+    setIsEditing(false);
   };
 
   const handleEditClick = () => {
-    if (isEditing) { // Was in "Done" mode, now saving
+    if (isEditing) {
       saveChanges();
-    } else { // Was in "Edit" mode, now entering edit
+    } else {
       setIsEditing(true);
     }
   };
 
   const handleEditableBlur = (event: React.FocusEvent<HTMLSpanElement>) => {
-    // Update local state and the DOM display with validated value
     const validatedValue = validateAndFormatNumber(event.currentTarget.innerText);
-    event.currentTarget.innerText = validatedValue; // Update DOM immediately
+    event.currentTarget.innerText = validatedValue;
 
     if (event.currentTarget === monthlyIncomeSpanRef.current) {
       setCurrentMonthlyIncome(validatedValue);
     } else if (event.currentTarget === allocatedIncomeSpanRef.current) {
       setCurrentAllocatedIncome(validatedValue);
     }
-    // Note: Actual saving to parent happens on "Done" click or Enter key
   };
 
   const handleEditableKeyDown = (event: React.KeyboardEvent<HTMLSpanElement>) => {
-    // Only allow digits, decimal point, and control keys
     const allowedKeys = [
       "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".",
       "Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"
     ];
 
     if (!allowedKeys.includes(event.key) && !event.ctrlKey && !event.metaKey) {
-      event.preventDefault(); // Prevent disallowed characters
+      event.preventDefault();
     }
 
     if (event.key === "Enter") {
-      event.preventDefault(); // Prevent new line
-      event.currentTarget.blur(); // Trigger blur to update local state
-      saveChanges(); // Explicitly save changes to parent
+      event.preventDefault();
+      event.currentTarget.blur();
+      saveChanges();
     } else if (event.key === "Escape") {
-      // Revert to original prop values and exit editing mode
       setCurrentMonthlyIncome(monthlyIncome);
       setCurrentAllocatedIncome(allocatedIncome);
       setIsEditing(false);
-      event.currentTarget.blur(); // Remove focus
+      event.currentTarget.blur();
     }
   };
-
-  // Format the next payment date for display
-  // const nextPaymentDateFormatted = dashboardOverview.nextOverallPaymentDate
-  //   ? new Date(dashboardOverview.nextOverallPaymentDate).toLocaleDateString('en-US', {
-  //       year: 'numeric',
-  //       month: 'short',
-  //       day: 'numeric',
-  //     })
-  //   : 'N/A'; 
 
   const paid = dashboardOverview.totalDebtPaid;
   const left = dashboardOverview.totalDebtLeft;
@@ -189,7 +158,6 @@ const Summary: React.FC<SummaryProps> = ({
                 <p className="label">debt left</p>
               </div>
               <div className="debt-box top-box">
-                {/* <p className="amount">{nextPaymentDateFormatted}</p> */}
                 <p className="amount">July 1st, 2025</p>
                 <p className="label">next date</p>
               </div>
@@ -220,7 +188,7 @@ const Summary: React.FC<SummaryProps> = ({
                       onKeyDown={handleEditableKeyDown}
                       inputMode="decimal"
                       suppressContentEditableWarning={true}
-                      onClick={isEditing ? undefined : handleEditClick} // Allow click to edit if not already editing
+                      onClick={isEditing ? undefined : handleEditClick}
                     >
                       {currentMonthlyIncome}
                     </span>
@@ -238,7 +206,7 @@ const Summary: React.FC<SummaryProps> = ({
                       onKeyDown={handleEditableKeyDown}
                       inputMode="decimal"
                       suppressContentEditableWarning={true}
-                      onClick={isEditing ? undefined : handleEditClick} // Allow click to edit if not already editing
+                      onClick={isEditing ? undefined : handleEditClick}
                     >
                       {currentAllocatedIncome}
                     </span>

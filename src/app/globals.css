@@ -11,36 +11,32 @@ body {
 }
 
 .scrollable-debt-list {
-  /* overflow-y: auto; */
   display: flex;
-  /* max-height: 400px; */
   flex-direction: column;
   gap: 1em;
   padding-right: 0.5em;
 }
 
 .scrollable-debt-list::-webkit-scrollbar {
-  width: 8px;               /* width of the scrollbar */
+  width: 8px;               
 }
 
 .scrollable-debt-list::-webkit-scrollbar-track {
-  background: white;      /* color of the track */
+  background: white;        
   border-radius: 10px;
 }
 
 .scrollable-debt-list::-webkit-scrollbar-thumb {
-  background: #484848;         /* color of the scrollbar handle */
+  background: #484848;          
   border-radius: 10px;
 }
 
 .scrollable-debt-list::-webkit-scrollbar-thumb:hover {
-  background: #343434;         /* color on hover */
-}
+  background: #343434;         }
 
 .progress-bar {
   width: 100%;
-  /* margin: 2em; */
-}
+  }
 
 .header {
   display: flex;
@@ -113,8 +109,7 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  /* border: 2px solid white; */
-}
+  }
 
 .circular-bar {
   width: 260px;
@@ -133,9 +128,7 @@ body {
   height: 220px;
   background: #939393;
   border-radius: 50%;
-  /* box-shadow: inset 6px 6px 10px -1px rgba(0, 0, 0, 0.15),
-    inset -6px -6px 10px -1px rgba(255, 255, 255, 0.7); */
-}
+  }
 
 .percent {
   z-index: 10;
@@ -154,11 +147,6 @@ body {
 #right-div {
   width: 100%;
   height: 100vh;
-  /* display: grid; */
-  /* grid-template-rows: 1fr 5fr; */
-  /* gap: 1em; */
-  /* background-color: #939393; */
-  /* padding: 1em; */
   border-radius: 16px;
 }
 
@@ -167,9 +155,7 @@ body {
   grid-template-columns: 1.5fr 1fr;
   gap: 15px;
   height: 100vh;
-
   width: 100%;
-  /* max-width: 3200px; */
   margin: 0 auto;
 }
 
@@ -180,7 +166,7 @@ body {
   padding: 2em;
   border-radius: 32px;
   background-color: #939393;
-  width: 100%; /* ✅ Ensure it fills the parent */
+  width: 100%;   
   box-sizing: border-box;
 }
 
@@ -196,15 +182,13 @@ body {
 }
 
 .debt-box {
-  background-color: #2e2e2e; /* dark background */
-  border-radius: 16px; /* rounded corners */
+  background-color: #2e2e2e;   
+  border-radius: 16px;   
   padding: 0.5em;
-  color: white; /* white text */
+  color: white;   
   text-align: center;
   font-family: "Segoe UI", sans-serif;
-  box-shadow: inset -5px -5px 10px rgba(255, 255, 255, 0.05),
-    inset 5px 5px 15px rgba(0, 0, 0, 0.4); /* subtle inner shadow */
-  /* width: fit-content;s */
+  box-shadow: inset -5px -5px 10px rgba(255, 255, 255, 0.05), inset 5px 5px 15px rgba(0, 0, 0, 0.4);     
   margin: auto;
 }
 
@@ -230,14 +214,10 @@ body {
 
 .bottom-box > .amount {
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-line-clamp: 2;   
   -webkit-box-orient: vertical;
   overflow: hidden;
-
-  /* white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis; */
-}
+  }
 
 #daily-task {
   display: flex;
@@ -282,22 +262,22 @@ input.editable {
   width: fit-content;
 }
 
-/* For Webkit browsers (Chrome, Safari, Edge) */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
-  margin: 0; /* Important to remove the space left by the buttons */
+  margin: 0; 
 }
 
 /* For Firefox */
 input[type="number"] {
-  -moz-appearance: textfield; /* This removes the spin buttons in Firefox */
+  -moz-appearance: textfield; 
 }
 
 #reload-img {
   height: 33px;
   width: 35px;
 }
+
 .svg-ring-wrapper {
   position: relative;
   width: 200px;
@@ -501,6 +481,7 @@ input[type="number"] {
     transform: translateY(0);
   }
 }
+
 /* Animate reload icon */
 .rotate {
   animation: spinReload 0.6s ease-in-out;
@@ -514,8 +495,9 @@ input[type="number"] {
     transform: rotate(360deg);
   }
 }
+
 #reload-img {
-  display: inline-block; /* add this */
+  display: inline-block; 
 }
 
 .achievements-section {
@@ -570,8 +552,7 @@ input[type="number"] {
   border-radius: 15px;
   padding: 25px 30px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  /* max-width: 600px; */
-  width: 100%;
+    width: 100%;
   box-sizing: border-box;
   color: #fff;
   max-height: fit-content;
@@ -611,8 +592,6 @@ hr {
   color: #fff;
   cursor: pointer;
   font-weight: bold;
-
-
   padding: 5px 10px;
   border-radius: 5px;
   transition: background-color 0.2s ease;
@@ -626,7 +605,7 @@ hr {
 }
 
 .car-edit:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .car-finances-label {
@@ -679,7 +658,7 @@ hr {
 }
 
 .car-action-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Styles for editable fields */
@@ -710,11 +689,11 @@ hr {
 }
 
 .car-finances-value.editable-field {
-    text-align: right;
+  text-align: right;
 }
 
 .editable-field[contenteditable="true"] {
-    line-height: normal;
+  line-height: normal;
 }
 
 /* active-debts-header */
@@ -739,12 +718,11 @@ hr {
 }
 
 .btn:active {
-  background-color: #484848; /* Darker shade on hover */
+  background-color: #484848;   
   cursor: pointer;
 }
 
 .fetch-div {
-  /* width: fit-content; */
   display: flex;
   gap: 2px;
   align-items: center;
@@ -768,7 +746,7 @@ hr {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7); /* Slightly darker overlay */
+  background-color: rgba(0, 0, 0, 0.7);   
   display: flex;
   justify-content: center;
   align-items: center;
@@ -776,33 +754,31 @@ hr {
 }
 
 .modal-content {
-  background-color: #2e2e2e; /* Dark background */
+  background-color: #2e2e2e;   
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5); /* More pronounced shadow for dark theme */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);   
   width: 90%;
   max-width: 400px;
   text-align: center;
-  color: white; /* Default text color to white */
-  position: relative;
+  color: white;   position: relative;
 }
 
 .modal-content h2 {
   font-size: 1.8em;
   margin-bottom: 15px;
-  color: white; /* Heading in white */
-}
+  color: white; }
 
 .modal-content p {
   margin-bottom: 10px;
-  color: #939393; /* Secondary text in medium gray */
+  color: #939393;   
   font-size: 0.95em;
 }
 
 .modal-remaining-debt {
   font-weight: bold;
   font-size: 1.1em;
-  color: #00aaff; /* A bright, contrasting blue for remaining debt */
+  color: #00aaff;   
   margin-bottom: 20px;
 }
 
@@ -815,25 +791,22 @@ hr {
   display: block;
   margin-bottom: 8px;
   font-weight: bold;
-  color: white; /* Label text in white */
-}
+  color: white; }
 
 .modal-input-group input {
   width: 100%;
   padding: 12px;
-  background-color: #3e3e3e; /* Slightly lighter dark background for input */
-  border: 1px solid #939393; /* Border in medium gray */
+  background-color: #3e3e3e;   
+  border: 1px solid #939393;   
   border-radius: 5px;
   font-size: 1.1em;
-  color: white; /* Input text in white */
-  box-sizing: border-box;
+  color: white;   box-sizing: border-box;
 }
 
 .modal-input-group input:focus {
   outline: none;
-  border-color: #00aaff; /* Focus border in bright blue */
-  box-shadow: 0 0 0 2px rgba(0, 170, 255, 0.3); /* Softer shadow for dark theme */
-}
+  border-color: #00aaff;   
+  box-shadow: 0 0 0 2px rgba(0, 170, 255, 0.3); }
 
 .modal-actions {
   display: flex;
@@ -852,16 +825,15 @@ hr {
 }
 
 .modal-cancel-button {
-  background-color: #939393; /* Cancel button in medium gray */
+  background-color: #939393;   
   color: white;
 }
 
 .modal-cancel-button:hover {
-  background-color: #7a7a7a; /* Slightly darker gray on hover */
-}
+  background-color: #7a7a7a; }
 
 .modal-confirm-button {
-  background-color: #007bff; /* Keep a primary blue for confirmation */
+  background-color: #007bff;   
   color: white;
 }
 
@@ -878,23 +850,22 @@ hr {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+  background-color: rgba(0, 0, 0, 0.5);   
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  z-index: 9999; /* Ensure it's on top of other content */
-}
+  z-index: 9999; }
 
 .debt-details-modal-content {
   background-color: #2e2e2e;
   border-radius: 8px;
   padding: 24px;
-  max-width: 40rem; /* Max width for the modal content */
+  max-width: 40rem;   
   width: 100%;
-  max-height: 90vh; /* Max height, allows scrolling if content is long */
-  overflow-y: auto; /* Enables vertical scrolling */
-  position: relative; /* Needed for positioning the close button */
+  max-height: 90vh;   
+  overflow-y: auto;   
+  position: relative; 
 }
 
 .debt-details-modal-close-button {
@@ -905,18 +876,17 @@ hr {
   cursor: pointer;
   border: none;
   background: none;
-  color: white; /* A dark color for the 'x' button on white background */
-}
+  color: white; }
 
 
 /* components/DebtDetails.css */
 
 #debt-details-container {
-  background-color: #2e2e2e; /* Main background color */
-  color: white;             /* All text is white by default */
+  background-color: #2e2e2e;   
+  color: white;               
   padding: 24px;
   border-radius: 8px;
-  font-family: sans-serif; /* A common font for readability */
+  font-family: sans-serif; 
 }
 
 #debt-details-container h2 {
@@ -927,23 +897,23 @@ hr {
 
 .details-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Two columns */
-  gap: 16px 24px;              /* Gap between rows and columns */
+  grid-template-columns: 1fr 1fr;   
+  gap: 16px 24px;                
   margin-bottom: 24px;
 }
 
 .detail-item p {
-  margin: 0; /* Remove default paragraph margins */
+  margin: 0; 
 }
 
 .detail-item .label {
-  color: #939393; /* Label text color */
+  color: #939393;   
   font-size: 0.875rem;
   margin-bottom: 4px;
 }
 
 .detail-item .value {
-  color: white; /* Value text color */
+  color: white;   
   font-size: 1.125rem;
   font-weight: bold;
 }
@@ -955,9 +925,9 @@ hr {
 }
 
 .payment-history-table-wrapper {
-  max-height: 200px; /* Make table scrollable */
+  max-height: 200px;   
   overflow-y: auto;
-  border: 1px solid #939393; /* Border for the table wrapper */
+  border: 1px solid #939393;  
   border-radius: 4px;
 }
 
@@ -967,32 +937,32 @@ hr {
 }
 
 .payment-history-table thead {
-  background-color: #3a3a3a; /* Darker background for table header */
-  position: sticky; /* Keep header visible on scroll */
+  background-color: #3a3a3a;   
+  position: sticky;   
   top: 0;
-  z-index: 1; /* Ensure header stays on top */
+  z-index: 1; 
 }
 
 .payment-history-table th {
   padding: 12px;
   text-align: left;
   font-size: 0.75rem;
-  color: #939393; /* Table header text color */
+  color: #939393; 
 }
 
 .payment-history-table tbody tr {
-  border-bottom: 1px solid #4a4a4a; /* Separator for table rows */
+  border-bottom: 1px solid #4a4a4a; 
 }
 
 .payment-history-table td {
   padding: 12px;
-  white-space: nowrap; /* Prevent date/amount from wrapping */
+  white-space: nowrap;   
   font-size: 0.875rem;
-  color: white; /* Table cell text color */
+  color: white; 
 }
 
 .no-history-message {
-  color: #939393; /* Message text color */
+  color: #939393; 
 }
 
 /* Progress */
@@ -1012,135 +982,134 @@ hr {
 /* AddDebtModal.css */
 
 .modal-backdrop {
-    position: fixed; /* Stays fixed relative to the viewport */
-    top: 0;
-    left: 0;
-    width: 100vw; /* Full viewport width */
-    height: 100vh; /* Full viewport height */
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Ensure it's on top of everything */
+  position: fixed;     
+  top: 0;
+  left: 0;
+  width: 100vw;     
+  height: 100vh;     
+  background-color: rgba(0, 0, 0, 0.7);     
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; 
 }
 
 .modal-content {
-    background-color: #333; /* Dark background similar to your existing UI */
-    color: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-    width: 90%;
-    max-width: 500px; /* Max width for readability */
-    position: relative; /* For positioning the close button */
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Space between header, form, etc. */
-    overflow-y: auto; /* Enable scrolling if content is too long */
-    max-height: 90vh; /* Don't let it exceed viewport height */
+  background-color: #333;     
+  color: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  width: 90%;
+  max-width: 500px;     
+  position: relative;     
+  display: flex;
+  flex-direction: column;
+  gap: 20px;     
+  overflow-y: auto;     
+  max-height: 90vh; 
 }
 
 .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #555;
-    margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #555;
+  margin-bottom: 15px;
 }
 
 .modal-header h2 {
-    margin: 0;
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: white;
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
 }
 
 .modal-close-button {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    color: #ccc;
-    cursor: pointer;
-    line-height: 1; /* Prevents extra space around the X */
-    padding: 0 5px;
-    transition: color 0.2s ease;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #ccc;
+  cursor: pointer;
+  line-height: 1;     padding: 0 5px;
+  transition: color 0.2s ease;
 }
 
 .modal-close-button:hover {
-    color: white;
+  color: white;
 }
 
 .modal-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Space between form groups */
+  display: flex;
+  flex-direction: column;
+  gap: 15px; 
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .form-group label {
-    font-weight: 500;
-    font-size: 0.95rem;
-    color: #e0e0e0;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #e0e0e0;
 }
 
 .form-group input {
-    padding: 10px 12px;
-    border: 1px solid #555;
-    border-radius: 6px;
-    background-color: #444;
-    color: white;
-    font-size: 1rem;
-    outline: none; /* Remove default focus outline */
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  padding: 10px 12px;
+  border: 1px solid #555;
+  border-radius: 6px;
+  background-color: #444;
+  color: white;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .form-group input:focus {
-    border-color: #777;
-    box-shadow: 0 0 0 2px rgba(119, 119, 119, 0.3); /* Subtle glow on focus */
+  border-color: #777;
+  box-shadow: 0 0 0 2px rgba(119, 119, 119, 0.3);
 }
 
 .form-actions {
-    display: flex;
-    justify-content: flex-end; /* Align buttons to the right */
-    gap: 10px;
-    margin-top: 20px; /* Space above buttons */
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .save-button,
 .cancel-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 600;
-    transition: background-color 0.2s ease, transform 0.2s ease;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .save-button {
-    background-color: #007bff; /* Blue for save */
-    color: white;
+  background-color: #007bff;
+  color: white;
 }
 
 .save-button:hover {
-    background-color: #0056b3;
-    transform: translateY(-1px);
+  background-color: #0056b3;
+  transform: translateY(-1px);
 }
 
 .cancel-button {
-    background-color: #6c757d; /* Gray for cancel */
-    color: white;
+  background-color: #6c757d;
+  color: white;
 }
 
 .cancel-button:hover {
-    background-color: #5a6268;
-    transform: translateY(-1px);
+  background-color: #5a6268;
+  transform: translateY(-1px);
 }
 
 /* Your Plan */
@@ -1150,7 +1119,7 @@ hr {
 }
 
 .generate-plan-btn {
-  background-color: #007bff; /* Blue for generate plan */
+  background-color: #007bff;
   color: white;
   padding: 10px 20px;
   border: none;

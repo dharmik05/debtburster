@@ -14,7 +14,6 @@ const YourPlan: React.FC<YourPlanProps> = ({ debts, userProfile }) => {
   if (!context) throw new Error("YourPlan must be used within DataContext.Provider");
   const { setAiPlan } = context;
 
-  console.log("YourPlan component props:", debts, userProfile);
   const [plan, setPlan] = useState("");
 
   const userProfileUpdated = {
@@ -30,16 +29,10 @@ const YourPlan: React.FC<YourPlanProps> = ({ debts, userProfile }) => {
         body: JSON.stringify({ debts: debts, userProfile: userProfileUpdated })
       });
 
-      console.log("Request sent to /api/plan with body:", {
-        debts: debts,
-        userProfile: userProfileUpdated
-      });
 
       const data = await res.json();
-      console.log("Response from /api/plan:", data);
       setPlan(data.plan || "No plan generated");
 
-      console.log("Plan fetched successfully:", data.plan);
       setAiPlan(data.plan || "No plan generated");
 
     } catch (error) {

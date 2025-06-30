@@ -1,4 +1,3 @@
-// components/DebtDetails.tsx
 import React from 'react';
 
 interface Debt {
@@ -12,7 +11,6 @@ interface Debt {
   interestRate: number;
   minimumPayment: number;
   paymentHistory: Array<{ date: string; amount: number; }>;
-  // expectedPaymentDates: string[];
   loanTermMonths?: number;
   creditLimit?: number;
   debtBalanceHistory?: Array<{

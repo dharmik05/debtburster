@@ -9,14 +9,6 @@ const TabSlider: React.FC<DashboardData> = ({ userProfile, debts, dashboardOverv
     switch (activeTab) {
       case "progress":
         return <Progress {...dashboardOverview} />;
-      case "debts":
-        return (
-          <ul>
-            <li>💳 Credit Card — $1200 remaining</li>
-            <li>🎓 Student Loan — $3000 remaining</li>
-            <li>🚗 Car Loan — $1800 remaining</li>
-          </ul>
-        );
       case "plan":
         return (<YourPlan debts={debts} userProfile={userProfile} />);
       default:
@@ -35,12 +27,6 @@ const TabSlider: React.FC<DashboardData> = ({ userProfile, debts, dashboardOverv
           >
             Progress
           </span>
-          {/* <span
-            className={`tab ${activeTab === "debts" ? "active" : ""}`}
-            onClick={() => setActiveTab("debts")}
-          >
-            Your Debts
-          </span> */}
           <span
             className={`tab ${activeTab === "plan" ? "active" : ""}`}
             onClick={() => setActiveTab("plan")}

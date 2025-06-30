@@ -165,15 +165,12 @@ const DebtCard: React.FC<DebtCardProps> = ({ debt, onUpdateDebt }) => {
       { date: paymentDate, amount: paymentAmount }
     ];
 
-    // const updatedExpectedPaymentDates = debt.expectedPaymentDates;
-
     const updatedDebt: Debt = {
       ...debt,
       amountPaid: parseFloat(newAmountPaid.toFixed(2)),
       remainingDebt: parseFloat(newRemainingDebt.toFixed(2)),
       percentageCompleted: parseFloat(newPercentageCompleted.toFixed(2)),
       paymentHistory: updatedPaymentHistory,
-      // expectedPaymentDates: updatedExpectedPaymentDates,
     };
 
     onUpdateDebt(updatedDebt);

@@ -22,10 +22,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ userData }) => {
     }
 
     const { aiPlan, setAiPlan } = context;
-    
 
-    console.log("ChatBox props:", userData);
-    console.log("aiPlan (from context):", aiPlan);
 
     const conversationRef = useRef<HTMLDivElement>(null);
 
@@ -34,10 +31,6 @@ const ChatBox: React.FC<ChatBoxProps> = ({ userData }) => {
         conversationRef.current.scrollTop = conversationRef.current.scrollHeight;
         }
     }, [messages]);
-
-    // const getBotResponse = (userMessage: string): string => {
-    //     return `You said: "${userMessage}". I'm a bot and I'm still learning!`;
-    // };
 
     const handleSendMessage = async() => {
         const u = userInput;
@@ -64,7 +57,6 @@ const ChatBox: React.FC<ChatBoxProps> = ({ userData }) => {
             });
 
             const data = await response.json();
-            console.log("Response from server:", data);
 
             if(!data.reply) throw new Error("No reply from server");
 

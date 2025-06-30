@@ -5,9 +5,6 @@ import { DashboardOverview } from "@/types/interface";
 
 const Progress: React.FC<DashboardOverview> = ({ debtBalanceHistory }) => {
 
-    console.log("Progress component props:", debtBalanceHistory);
-
-    console.log("Rendering Progress component");
 
     const progressChartRef = useRef<HTMLCanvasElement | null>(null);
     const chartInstanceRef = useRef<Chart | null>(null);

@@ -31,14 +31,12 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   const amountInputRef = useRef<HTMLInputElement>(null);
   const dateInputRef = useRef<HTMLInputElement>(null);
 
-  // Focus the amount input field when the modal opens
   useEffect(() => {
     if (isOpen && amountInputRef.current) {
       amountInputRef.current.focus();
     }
   }, [isOpen]);
 
-  // Reset payment amount and date when modal closes or opens
   useEffect(() => {
     if (!isOpen) {
       setPaymentAmount('');
@@ -55,7 +53,6 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     }
   };
 
-  // For date input change
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPaymentDate(e.target.value);
   };
@@ -70,25 +67,16 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       return;
     }
     
-    // Check if payment amount exceeds remaining debt
     if (amount > remainingDebt) {
         alert(`Payment amount ($${amount.toFixed(2)}) cannot exceed remaining debt ($${remainingDebt.toFixed(2)}).`);
         return;
     }
 
-    // Ensure date is not in the future
-    // if (selectedDate > today) {
-    //   alert('Payment date cannot be in the future.');
-    //   return;
-    // }
-
-    // Call onConfirmPayment with both amount and date
     onConfirmPayment(amount, paymentDate); 
   };
 
   if (!isOpen) return null;
 
-  // Handles closing modal on Escape key
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Escape') {
       onClose();
@@ -127,7 +115,6 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             ref={dateInputRef}
             value={paymentDate}
             onChange={handleDateChange}
-            // max={getTodayDateString()}
           />
         </div>
 
